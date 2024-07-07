@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane prefHeight="889.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectofinal.NormalStreet">
+   <children>
+      <Pane fx:id="root" layoutY="26.0" prefHeight="863.0" prefWidth="1280.0" style="-fx-background-image: url('file:src/main/resources/com/example/proyectofinal/background.png'); -fx-background-size: cover;">
+         <Rectangle fx:id="oestePare" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="79.0" layoutX="536.0" layoutY="458.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+         <Rectangle fx:id="estePare" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="79.0" layoutX="758.0" layoutY="379.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+         <Rectangle fx:id="nortePare" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="79.0" layoutX="602.0" layoutY="303.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+         <Rectangle fx:id="surPare" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="79.0" layoutX="694.0" layoutY="527.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+
+         <Circle fx:id="este" fill="#1f93ff" layoutX="1242.0" layoutY="419.0" onMouseClicked="#handleCircleClick" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+         <Circle fx:id="sur" fill="DODGERBLUE" layoutX="702.0" layoutY="825.0" onMouseClicked="#handleCircleClick" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+         <Circle fx:id="oeste" fill="DODGERBLUE" layoutX="32.0" layoutY="495.0" onMouseClicked="#handleCircleClick" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+         <Circle fx:id="norte" fill="DODGERBLUE" layoutX="608.0" layoutY="45.0" onMouseClicked="#handleCircleClick" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+
+          <Circle fx:id="esteamb" fill="#ff0017" layoutX="1242.0" layoutY="419.0" onMouseClicked="#handleCircleClickAmb" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+          <Circle fx:id="suramb" fill="#ff0017" layoutX="702.0" layoutY="825.0" onMouseClicked="#handleCircleClickAmb" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+          <Circle fx:id="oesteamb" fill="#ff0017" layoutX="32.0" layoutY="495.0" onMouseClicked="#handleCircleClickAmb" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+          <Circle fx:id="norteamb" fill="#ff0017" layoutX="608.0" layoutY="45.0" onMouseClicked="#handleCircleClickAmb" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+         <Pane fx:id="direccionPane" layoutX="434.0" layoutY="725.0" style="-fx-background-color: white;" visible="false" >
+
+             <HBox prefHeight="120.0" prefWidth="458.0" spacing="10">
+                 <StackPane fx:id="izquierdadir" prefHeight="100.0" prefWidth="115.0" onMouseClicked="#handleDirection">
+                     <Rectangle fx:id="izquierda" fill="#e1e1e1"  height="100" width="115" arcWidth="25" arcHeight="25" />
+                     <ImageView fx:id="izquierdaimg" fitHeight="100" fitWidth="115" rotate="270">
+                            <image>
+                                <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png"/>
+                            </image>
+                     </ImageView>
+                 </StackPane>
+                 <StackPane fx:id="alantedir" prefHeight="100.0" prefWidth="115.0" onMouseClicked="#handleDirection">
+                     <Rectangle fx:id="alante" fill="#e1e1e1" height="100" width="115" arcWidth="25" arcHeight="25" />
+                     <ImageView fx:id="alanteimg" fitHeight="100" fitWidth="115" rotate="0">
+                         <image>
+                             <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png" />
+                         </image>
+                     </ImageView>
+                 </StackPane>
+                 <StackPane fx:id="udir" prefHeight="100.0" prefWidth="115.0" onMouseClicked="#handleDirection">
+                     <Rectangle fx:id="enu" fill="#e1e1e1" height="100" width="115" arcWidth="25" arcHeight="25" />
+                     <ImageView fx:id="enuimg" fitHeight="100" fitWidth="115">
+                         <image>
+                             <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/giroU.png" />
+                         </image>
+                     </ImageView>
+                 </StackPane>
+                 <StackPane fx:id="derechadir" layoutX="151.0" prefHeight="100.0" prefWidth="115.0" onMouseClicked="#handleDirection">
+                     <Rectangle fx:id="derecha" fill="#e1e1e1" height="100" width="115" arcWidth="25" arcHeight="25" />
+                     <ImageView fx:id="derechaimg" fitHeight="100" fitWidth="115" rotate="90">
+                         <image>
+                             <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png" />
+                         </image>
+                     </ImageView>
+                 </StackPane>
+             </HBox>
+         </Pane>
+      </Pane>
+      <MenuBar prefHeight="25.0" prefWidth="1280.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Agregar">
+            <items>
+                <MenuItem fx:id="agregarAmbulancia" mnemonicParsing="false" text="Ambulancia" />
+                <MenuItem fx:id="agregarCarrito" mnemonicParsing="false" text="Carro" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Opciones">
+            <items>
+                  <MenuItem mnemonicParsing="false" text="Reiniciar" />
+              <MenuItem mnemonicParsing="false" text="Eliminar Carros" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</AnchorPane>

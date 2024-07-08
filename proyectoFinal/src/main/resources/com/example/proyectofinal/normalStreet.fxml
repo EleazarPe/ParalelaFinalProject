@@ -29,35 +29,35 @@
           <Circle fx:id="suramb" fill="#ff0017" layoutX="702.0" layoutY="825.0" onMouseClicked="#handleCircleClickAmb" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
           <Circle fx:id="oesteamb" fill="#ff0017" layoutX="32.0" layoutY="495.0" onMouseClicked="#handleCircleClickAmb" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
           <Circle fx:id="norteamb" fill="#ff0017" layoutX="608.0" layoutY="45.0" onMouseClicked="#handleCircleClickAmb" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
-         <Pane fx:id="direccionPane" layoutX="434.0" layoutY="725.0" style="-fx-background-color: white;" visible="false" >
+         <Pane fx:id="direccionPane" layoutX="434.0" layoutY="725.0" style="-fx-background-color: white;" visible="false">
 
              <HBox prefHeight="120.0" prefWidth="458.0" spacing="10">
-                 <StackPane fx:id="izquierdadir" prefHeight="100.0" prefWidth="115.0" onMouseClicked="#handleDirection">
-                     <Rectangle fx:id="izquierda" fill="#e1e1e1"  height="100" width="115" arcWidth="25" arcHeight="25" />
+                 <StackPane fx:id="izquierdadir" onMouseClicked="#handleDirection" prefHeight="100.0" prefWidth="115.0">
+                     <Rectangle fx:id="izquierda" arcHeight="25" arcWidth="25" fill="#e1e1e1" height="100" width="115" />
                      <ImageView fx:id="izquierdaimg" fitHeight="100" fitWidth="115" rotate="270">
                             <image>
-                                <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png"/>
+                                <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png" />
                             </image>
                      </ImageView>
                  </StackPane>
-                 <StackPane fx:id="alantedir" prefHeight="100.0" prefWidth="115.0" onMouseClicked="#handleDirection">
-                     <Rectangle fx:id="alante" fill="#e1e1e1" height="100" width="115" arcWidth="25" arcHeight="25" />
+                 <StackPane fx:id="alantedir" onMouseClicked="#handleDirection" prefHeight="100.0" prefWidth="115.0">
+                     <Rectangle fx:id="alante" arcHeight="25" arcWidth="25" fill="#e1e1e1" height="100" width="115" />
                      <ImageView fx:id="alanteimg" fitHeight="100" fitWidth="115" rotate="0">
                          <image>
                              <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png" />
                          </image>
                      </ImageView>
                  </StackPane>
-                 <StackPane fx:id="udir" prefHeight="100.0" prefWidth="115.0" onMouseClicked="#handleDirection">
-                     <Rectangle fx:id="enu" fill="#e1e1e1" height="100" width="115" arcWidth="25" arcHeight="25" />
+                 <StackPane fx:id="udir" onMouseClicked="#handleDirection" prefHeight="100.0" prefWidth="115.0">
+                     <Rectangle fx:id="enu" arcHeight="25" arcWidth="25" fill="#e1e1e1" height="100" width="115" />
                      <ImageView fx:id="enuimg" fitHeight="100" fitWidth="115">
                          <image>
                              <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/giroU.png" />
                          </image>
                      </ImageView>
                  </StackPane>
-                 <StackPane fx:id="derechadir" layoutX="151.0" prefHeight="100.0" prefWidth="115.0" onMouseClicked="#handleDirection">
-                     <Rectangle fx:id="derecha" fill="#e1e1e1" height="100" width="115" arcWidth="25" arcHeight="25" />
+                 <StackPane fx:id="derechadir" layoutX="151.0" onMouseClicked="#handleDirection" prefHeight="100.0" prefWidth="115.0">
+                     <Rectangle fx:id="derecha" arcHeight="25" arcWidth="25" fill="#e1e1e1" height="100" width="115" />
                      <ImageView fx:id="derechaimg" fitHeight="100" fitWidth="115" rotate="90">
                          <image>
                              <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png" />
@@ -66,6 +66,8 @@
                  </StackPane>
              </HBox>
          </Pane>
+         <Rectangle fx:id="cruce" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="138.0" layoutX="588.0" layoutY="389.0" strokeType="INSIDE" width="136.0" />
+
       </Pane>
       <MenuBar prefHeight="25.0" prefWidth="1280.0">
         <menus>

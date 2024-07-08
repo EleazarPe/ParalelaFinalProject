@@ -12,6 +12,8 @@ public class Car {
     private String origen;
     private String destino;
     private AnimationTimer animationTimer;
+    private boolean inCrossing;
+    private boolean pare;
 
     public Car(ImageView imageView, Rectangle rectangle, int id, boolean tipoEmergencia, String origen) {
         this.id = id;
@@ -19,6 +21,8 @@ public class Car {
         this.rectangle = rectangle;
         this.tipoEmergencia = tipoEmergencia;
         this.origen = origen;
+        this.inCrossing = false;
+        this.pare = false;
     }
 
     public int getId() {
@@ -72,5 +76,20 @@ public class Car {
 
     public void setDestino(String destino) {
         this.destino = destino;
+    }
+    public boolean isInCrossing() {
+        return inCrossing;
+    }
+
+    public void setInCrossing(boolean inCrossing) {
+        this.inCrossing = inCrossing;
+    }
+
+    public boolean isPare() {
+        return pare;
+    }
+
+    public void setPare(boolean pare) {
+        this.pare = pare;
     }
 }

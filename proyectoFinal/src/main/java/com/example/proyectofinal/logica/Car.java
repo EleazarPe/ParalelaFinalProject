@@ -14,6 +14,7 @@ public class Car {
     private AnimationTimer animationTimer;
     private boolean inCrossing;
     private boolean pare;
+    private boolean running;
 
     public Car(ImageView imageView, Rectangle rectangle, int id, boolean tipoEmergencia, String origen) {
         this.id = id;
@@ -23,6 +24,7 @@ public class Car {
         this.origen = origen;
         this.inCrossing = false;
         this.pare = false;
+        this.running = false;
     }
 
     public int getId() {
@@ -91,5 +93,13 @@ public class Car {
 
     public void setPare(boolean pare) {
         this.pare = pare;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 }

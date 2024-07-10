@@ -3,6 +3,7 @@ package com.example.proyectofinal;
 import com.example.proyectofinal.logica.Car;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -19,22 +19,18 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class NormalStreet {
     @FXML
     private Pane root;
-    @FXML
-    private Rectangle carrito;
-
-    @FXML
-    private ImageView carritoImagen;
     @FXML
     private Circle este;
     @FXML
     private Circle oeste;
     @FXML
     private Circle norte;
-
     @FXML
     private Circle sur;
     @FXML
@@ -49,7 +45,6 @@ public class NormalStreet {
     private MenuItem agregarCarrito;
     @FXML
     private MenuItem agregarAmbulancia;
-
     @FXML
     private Rectangle estePare;
     @FXML
@@ -64,6 +59,8 @@ public class NormalStreet {
     private Rectangle cruce;
 
     private int idcars = 0;
+
+
 
 //    private double carritoX = 0;
 //    private double carritoY = 0;
@@ -80,6 +77,8 @@ public class NormalStreet {
 //    private Set<String> pressedKeys = new HashSet<>();
     private static final String[] CARS = {"redcar", "graycar", "whitecar"};
     private List<Car> cars = new ArrayList<>();
+    private BlockingDeque<Car> colaInterseccion = new LinkedBlockingDeque<>(100);
+
     @FXML
     public void initialize() {
 
@@ -119,6 +118,9 @@ public class NormalStreet {
         //cercania();
         timeline();
         llegada();
+        tiempoDeCola();
+        cercania2();
+        mover();
     }
 //    private void cercania(){
 //        AnimationTimer animationTimer = new AnimationTimer() {
@@ -163,6 +165,163 @@ public class NormalStreet {
 //
 //        animationTimer.start();
 //    }
+    private void temporal(){
+        for (int i = 0; i < cars.size(); i++) {
+            Car car1 = cars.get(i);
+            for (int j = 0; j < cars.size(); j++) {
+                if (i == j) continue;
+                Car car2 = cars.get(j);
+                //if (car1.getRectangle().getBoundsInParent().intersects(car2.getRectangle().getBoundsInParent())) {
+
+                if ((car1.getRectangle().getRotate() == 180 && car2.getRectangle().getRotate() == 180)) {
+                    //System.out.println("Bajando");
+                    if (car1.getRectangle().getY() > car2.getRectangle().getY() && car1.getRectangle().getY() - car2.getRectangle().getY() < 110) {
+//                                if(!car1.isPare()){
+                        if (car2.getAnimationTimer() != null) {
+                            car2.getAnimationTimer().stop();
+                            car2.setRunning(false);
+                        }
+                        //}
+
+                    } //else {
+//                                if (car1.getAnimationTimer() != null) {
+//                                      car1.getAnimationTimer().stop();
+//                                      car1.setRunning(false);
+//                                }
+//                            }
+                } else if((car1.getRectangle().getRotate() == 0 && car2.getRectangle().getRotate() == 0)){
+                    if (car1.getRectangle().getY() < car2.getRectangle().getY() && car2.getRectangle().getY() - car1.getRectangle().getY()  < 110) {
+//                                if(!car1.isPare()){
+                        if (car2.getAnimationTimer() != null) {
+                            car2.getAnimationTimer().stop();
+                            car2.setRunning(false);
+                        }
+                        //}
+
+                    }
+                }else if((car1.getRectangle().getRotate() == 90 && car2.getRectangle().getRotate() == 90)){
+                    if (car1.getRectangle().getX() > car2.getRectangle().getX() &&  car1.getRectangle().getX() - car2.getRectangle().getX()  < 110) {
+//                                if(!car1.isPare()){
+                        if (car2.getAnimationTimer() != null) {
+                            car2.getAnimationTimer().stop();
+                            car2.setRunning(false);
+                        }
+                        //}
+
+                    }
+
+                }else if((car1.getRectangle().getRotate() == 270 && car2.getRectangle().getRotate() == 270)){
+                    if (car1.getRectangle().getX() < car2.getRectangle().getX() && car2.getRectangle().getX() - car1.getRectangle().getX()   < 110) {
+//                                if(!car1.isPare()){
+                        if (car2.getAnimationTimer() != null) {
+                            car2.getAnimationTimer().stop();
+                            car2.setRunning(false);
+                        }
+                        //}
+
+                    }
+                }
+                //}
+            }
+        }
+    }
+    private boolean temporal2(Car carro){
+        for (int i = 0; i < cars.size(); i++) {
+            Car car1 = cars.get(i);
+            if (car1.equals(carro)) {
+                continue;
+            }
+            if ((car1.getRectangle().getRotate() == 180 && carro.getRectangle().getRotate() == 180)) {
+                if (car1.getRectangle().getY() > carro.getRectangle().getY() && car1.getRectangle().getY() - carro.getRectangle().getY() < 110) {
+                    return false;
+                }
+            } else if((car1.getRectangle().getRotate() == 0 && carro.getRectangle().getRotate() == 0)) {
+                if (car1.getRectangle().getY() < carro.getRectangle().getY() && carro.getRectangle().getY() - car1.getRectangle().getY() < 110) {
+                    return false;
+                }
+            }else if((car1.getRectangle().getRotate() == 90 && carro.getRectangle().getRotate() == 90)) {
+                if (car1.getRectangle().getX() > carro.getRectangle().getX() && car1.getRectangle().getX() - carro.getRectangle().getX() < 110) {
+                    return false;
+                }
+            }else if((car1.getRectangle().getRotate() == 270 && carro.getRectangle().getRotate() == 270)) {
+                if (car1.getRectangle().getX() < carro.getRectangle().getX() && carro.getRectangle().getX() - car1.getRectangle().getX() < 110) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void cercania2() {
+        Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
+            temporal();
+        }));
+        collisionChecker.setCycleCount(Timeline.INDEFINITE);
+        collisionChecker.play();
+    }
+    private void mover(){
+        Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(500), event -> {
+
+            for(Car car: cars){
+                if(!car.isRunning()){
+                    if(!car.isInCrossing()) {
+                        if(car.getAnimationTimer() != null) {
+                            if(!car.isPare()) {
+                                if(temporal2(car)) {
+                                    car.getAnimationTimer().start();
+                                    car.setRunning(true);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }));
+        collisionChecker.setCycleCount(Timeline.INDEFINITE);
+        collisionChecker.play();
+    }
+//    private void mover(){
+//        Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
+//
+//            for(Car car: cars){
+//                    if(!car.isRunning()){
+//                        if(!car.isInCrossing()) {
+//                            if(car.getAnimationTimer() != null) {
+//                                if(car.isPare()) {
+//                                    int i = 0;
+//                                    for (Car c : cars) {
+//                                        if (c.isInCrossing()) {
+//                                            i++;
+//                                        }
+//                                    }
+//                                    if (i == 0) {
+//                                        car.getAnimationTimer().start();
+//                                        car.setRunning(true);
+//                                    }
+//                                }else{
+//                                    car.getAnimationTimer().start();
+//                                    car.setRunning(true);
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//            }
+//        }));
+//        collisionChecker.setCycleCount(Timeline.INDEFINITE);
+//        collisionChecker.play();
+//    }
+//    private int conseguirPosicion(Car car){
+//        int posicion =0;
+//        for(Car carBlockingDeque: colaInterseccion){
+//            if (car.equals(carBlockingDeque)) {
+//                return posicion;
+//            }
+//            posicion++;
+//        }
+//        return 0;
+//    }
 
     @FXML
     public void handleCircleClick(MouseEvent event) {
@@ -193,6 +352,7 @@ public class NormalStreet {
         System.out.println("Direction pressed: " + stackPane.getId());
         direccionPane.setVisible(false);
         correr(idcars-1,stackPane.getId());
+
     }
     private void direccion() {
         direccionPane.setVisible(true);
@@ -264,6 +424,7 @@ public class NormalStreet {
         }
         if(timer != null){
             car.setAnimationTimer(timer);
+            car.setRunning(true);
         }
     }
 
@@ -281,6 +442,7 @@ public class NormalStreet {
                     if (car.isInCrossing()) {
                         car.setInCrossing(false);
                         System.out.println("Salió del cruce id: " + car.getId());
+                        //sacarDeCola();
                     }
                 }
             }
@@ -289,7 +451,59 @@ public class NormalStreet {
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
     }
-
+    private void sacarDeCola(){
+        if (!colaInterseccion.isEmpty()) {
+            Car car = colaInterseccion.poll();
+            car.getAnimationTimer().start();
+            car.setRunning(true);
+//            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+//            pause.setOnFinished(event -> car.getAnimationTimer().start());
+//            pause.play();
+        }
+    }
+    private void tiempoDeCola() {
+            Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(500), event -> {
+                int crossing= 0;
+                for (Car c :cars) {
+                    if(c.isInCrossing()){
+                        crossing++;
+                    }
+                }
+                if(crossing == 0){
+                    sacarDeCola();
+                }
+            }));
+            collisionChecker.setCycleCount(Timeline.INDEFINITE);
+            collisionChecker.play();
+    }
+//    private void observador(){
+//        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//        AtomicLong lastChangeTime = new AtomicLong(System.currentTimeMillis());
+//        //scheduler.scheduleAtFixedRate(Objects.requireNonNull(checkQueue(lastChangeTime)), 0, 1, TimeUnit.SECONDS);
+//    }
+//    private void monitorQueue( long idleTimeMillis) {
+//        long startTime = System.currentTimeMillis();
+//
+//        while (true) {
+//
+//            if (colaInterseccion.isEmpty()) {
+//                long currentTime = System.currentTimeMillis();
+//                if (currentTime - startTime >= idleTimeMillis) {
+//                    System.out.println("Sacando de cola");
+//                    sacarDeCola();
+//                }
+//            } else {
+//                startTime = System.currentTimeMillis();
+//            }
+//        }
+//    }
+//    private Runnable checkQueue(AtomicLong lastChangeTime) {
+//        long currentTime = System.currentTimeMillis();
+//        if (currentTime - lastChangeTime.get() >= 2000) {
+//            sacarDeCola();
+//        }
+//        return null;
+//    }
     private void llegada(){
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             for (Car car : cars) {
@@ -297,22 +511,34 @@ public class NormalStreet {
                     if (!car.isPare()) {
                         System.out.println("Llego al stop Este id: " + car.getId());
                         car.setPare(true);
+                        car.getAnimationTimer().stop();
+                        car.setRunning(false);
+                        colaInterseccion.add(car);
                     }
                     //car.getAnimationTimer().stop();
                 }else if (car.getRectangle().getBoundsInParent().intersects(oestePare.getBoundsInParent())){
                     if (!car.isPare()) {
                         System.out.println("Llego al stop Oeste id: " + car.getId());
                         car.setPare(true);
+                        car.getAnimationTimer().stop();
+                        car.setRunning(false);
+                        colaInterseccion.add(car);
                     }
                 }else if (car.getRectangle().getBoundsInParent().intersects(nortePare.getBoundsInParent())){
                     if (!car.isPare()) {
                         System.out.println("Llego al stop Norte id: " + car.getId());
                         car.setPare(true);
+                        car.getAnimationTimer().stop();
+                        car.setRunning(false);
+                        colaInterseccion.add(car);
                     }
                 }else if (car.getRectangle().getBoundsInParent().intersects(surPare.getBoundsInParent())) {
                     if (!car.isPare()) {
                         System.out.println("Llego al stop Sur id: " + car.getId());
                         car.setPare(true);
+                        car.getAnimationTimer().stop();
+                        car.setRunning(false);
+                        colaInterseccion.add(car);
                     }
                 }else{
                     if (car.isPare()) {
@@ -326,47 +552,15 @@ public class NormalStreet {
         collisionChecker.play();
     }
 
-//    private void crusando(Car car){
-//        AnimationTimer timer = new AnimationTimer() {
-//            @Override
-//            public void handle(long now) {
-//                switch (car.getOrigen()) {
-//                    case "este" -> {
-//                        switch (car.getDestino()) {
-//                            case "izquierdadir" -> {
-//                                double newX = car.getRectangle().getY() + 1;
-//                                if (newX > root.getHeight()) {
-//                                    newX = -50;
-//                                }
-//                                car.getRectangle().setY(newX);
-//                                car.getImageView().setLayoutY(newX);
-//                            }
-//                            case "alantedir" -> {
-//
-//                            }
-//                            case "udir" -> {
-//
-//                            }
-//                            case "derechadir" -> {
-//
-//                            }
-//                        }
-//                    }
-//
-//                }
-//            }
-//        };
-//        timer.start();
-//        car.setAnimationTimer(timer);
-//    }
+
 private void crusando(Car car) {
     AnimationTimer timer = new AnimationTimer() {
         private boolean movedInX = false;
         private boolean madeUTurn = false;
         private double initialX = car.getRectangle().getX();
         private double initialY = car.getRectangle().getY();
-        private double moveDistanceDerecha = 75;  // distancia en píxeles a mover en X
-        private double moveDistanceIzquierda = 155;
+        private double moveDistanceDerecha = 115;  // distancia en píxeles a mover en X
+        private double moveDistanceIzquierda = 190;
         private double curveRadius = 80;
 
         @Override
@@ -415,7 +609,7 @@ private void crusando(Car car) {
                                 car.getImageView().setLayoutX(newX);
                             } else if (!madeUTurn) {
                                 double newY = car.getRectangle().getY() + 1;
-                                if (newY-initialY >=  curveRadius) {
+                                if (newY - initialY >= curveRadius) {
                                     madeUTurn = true;
                                     car.getRectangle().setRotate(90);  // Gira el carro hacia adelante
                                     car.getImageView().setRotate(90);
@@ -468,8 +662,8 @@ private void crusando(Car car) {
                                 car.getRectangle().setRotate(0);
                                 car.getImageView().setRotate(0);
                                 double newY = car.getRectangle().getY() - 1;
-                                if (newY < root.getHeight()) {
-                                    resetCarPositionEste(car);
+                                if (newY < 0) {
+                                    resetCarPositionOeste(car);
                                 } else {
                                     car.getRectangle().setY(newY);
                                     car.getImageView().setLayoutY(newY);
@@ -478,73 +672,240 @@ private void crusando(Car car) {
                         }
                         case "alantedir" -> {
                             double newX = car.getRectangle().getX() + 1;
-                            if (newX > root.getWidth()+50) {
-                                //resetCarPositionEste(car);
+                            if (newX > root.getWidth() + 50) {
+                                resetCarPositionOeste(car);
                             } else {
                                 car.getRectangle().setX(newX);
                                 car.getImageView().setLayoutX(newX);
                             }
                         }
-//                        case "udir" -> {
-//                            if (!movedInX) {
-//                                double newX = car.getRectangle().getX() - 1;
-//                                if (initialX - newX >= moveDistanceDerecha) {
-//                                    movedInX = true;
-//                                    car.getRectangle().setRotate(180);
-//                                    car.getImageView().setRotate(180);
-//                                }
-//                                car.getRectangle().setX(newX);
-//                                car.getImageView().setLayoutX(newX);
-//                            } else if (!madeUTurn) {
-//                                double newY = car.getRectangle().getY() + 1;
-//                                if (newY-initialY >=  curveRadius) {
-//                                    madeUTurn = true;
-//                                    car.getRectangle().setRotate(90);  // Gira el carro hacia adelante
-//                                    car.getImageView().setRotate(90);
-//                                }
-//                                car.getRectangle().setY(newY);
-//                                car.getImageView().setLayoutY(newY);
-//                            } else {
-//                                double newX = car.getRectangle().getX() + 1;
-//                                if (newX > root.getWidth()) {
-//                                    resetCarPositionEste(car);
-//                                } else {
-//                                    car.getRectangle().setX(newX);
-//                                    car.getImageView().setLayoutX(newX);
-//                                }
-//                            }
-//                        }
-//                        case "derechadir" -> {
-//                            if (!movedInX) {
-//                                double newX = car.getRectangle().getX() - 1;
-//                                if (initialX - newX >= moveDistanceDerecha) {
-//                                    movedInX = true;  // Movimiento en X completado
-//                                }
-//                                car.getRectangle().setX(newX);
-//                                car.getImageView().setLayoutX(newX);
-//                            } else {
-//                                car.getRectangle().setRotate(0);
-//                                car.getImageView().setRotate(0);
-//                                double newY = car.getRectangle().getY() - 1;
-//                                if (newY < 0) {
-//                                    resetCarPositionEste(car);
-//                                } else {
-//                                    car.getRectangle().setY(newY);
-//                                    car.getImageView().setLayoutY(newY);
-//                                }
-//                            }
-//                        }
+                        case "udir" -> {
+                            if (!movedInX) {
+                                double newX = car.getRectangle().getX() + 1;
+                                if (newX - initialX >= moveDistanceDerecha) {
+                                    movedInX = true;
+                                    car.getRectangle().setRotate(0);
+                                    car.getImageView().setRotate(0);
+                                }
+                                car.getRectangle().setX(newX);
+                                car.getImageView().setLayoutX(newX);
+                            } else if (!madeUTurn) {
+                                double newY = car.getRectangle().getY() - 1;
+                                if (initialY - newY >= curveRadius) {
+                                    madeUTurn = true;
+                                    car.getRectangle().setRotate(270);
+                                    car.getImageView().setRotate(270);
+                                }
+                                car.getRectangle().setY(newY);
+                                car.getImageView().setLayoutY(newY);
+                            } else {
+                                double newX = car.getRectangle().getX() - 1;
+                                if (newX < -50) {
+                                    resetCarPositionOeste(car);
+                                } else {
+                                    car.getRectangle().setX(newX);
+                                    car.getImageView().setLayoutX(newX);
+                                }
+                            }
+                        }
+                        case "derechadir" -> {
+                            if (!movedInX) {
+                                double newX = car.getRectangle().getX() + 1;
+                                if (newX - initialX >= moveDistanceDerecha) {
+                                    movedInX = true;  // Movimiento en X completado
+                                }
+                                car.getRectangle().setX(newX);
+                                car.getImageView().setLayoutX(newX);
+                            } else {
+                                car.getRectangle().setRotate(180);
+                                car.getImageView().setRotate(180);
+                                double newY = car.getRectangle().getY() + 1;
+                                if (newY > root.getHeight()) {
+                                    resetCarPositionOeste(car);
+                                } else {
+                                    car.getRectangle().setY(newY);
+                                    car.getImageView().setLayoutY(newY);
+                                }
+                            }
+                        }
+                    }
+                }
+                case "norte" -> {
+                    switch (car.getDestino()) {
+                        case "izquierdadir" -> {
+                            if (!movedInX) {
+                                double newY = car.getRectangle().getY() + 1;
+                                if (newY - initialY >= moveDistanceIzquierda) {
+                                    movedInX = true;
+                                }
+                                car.getRectangle().setY(newY);
+                                car.getImageView().setLayoutY(newY);
+                            } else {
+                                car.getRectangle().setRotate(90);
+                                car.getImageView().setRotate(90);
+                                double newX = car.getRectangle().getX() + 1;
+                                if (newX > root.getWidth()) {
+                                    resetCarPositionNorte(car);
+                                } else {
+                                    car.getRectangle().setX(newX);
+                                    car.getImageView().setLayoutX(newX);
+                                }
+                            }
+                        }
+                        case "alantedir" -> {
+                            double newY = car.getRectangle().getY() + 1;
+                            if (newY > root.getHeight()) {
+                                resetCarPositionNorte(car);
+                            } else {
+                                car.getRectangle().setY(newY);
+                                car.getImageView().setLayoutY(newY);
+                            }
+                        }
+                        case "udir" -> {
+                            if (!movedInX) {
+                                double newY = car.getRectangle().getY() + 1;
+                                if (newY - initialY >= moveDistanceDerecha) {
+                                    movedInX = true;
+                                    car.getRectangle().setRotate(90);
+                                    car.getImageView().setRotate(90);
+                                }
+                                car.getRectangle().setY(newY);
+                                car.getImageView().setLayoutY(newY);
+                            } else if (!madeUTurn) {
+                                double newX = car.getRectangle().getX() + 1;
+                                if (newX - initialX >= curveRadius) {
+                                    madeUTurn = true;
+                                    car.getRectangle().setRotate(0);
+                                    car.getImageView().setRotate(0);
+                                }
+                                car.getRectangle().setX(newX);
+                                car.getImageView().setLayoutX(newX);
+                            } else {
+                                double newY = car.getRectangle().getY() - 1;
+                                if (newY < -50) {
+                                    resetCarPositionNorte(car);
+                                } else {
+                                    car.getRectangle().setY(newY);
+                                    car.getImageView().setLayoutY(newY);
+                                }
+                            }
+                        }
+                        case "derechadir" -> {
+                            if (!movedInX) {
+                                double newY = car.getRectangle().getY() + 1;
+                                if (newY - initialY >= moveDistanceDerecha) {
+                                    movedInX = true;
+                                }
+                                car.getRectangle().setY(newY);
+                                car.getImageView().setLayoutY(newY);
+                            } else {
+                                car.getRectangle().setRotate(270);
+                                car.getImageView().setRotate(270);
+                                double newX = car.getRectangle().getX() - 1;
+                                if (newX < 0) {
+                                    resetCarPositionNorte(car);
+                                } else {
+                                    car.getRectangle().setX(newX);
+                                    car.getImageView().setLayoutX(newX);
+                                }
+                            }
+                        }
+                    }
+                }
+                case "sur" -> {
+                    switch (car.getDestino()) {
+                        case "izquierdadir" -> {
+                            if (!movedInX) {
+                                double newY = car.getRectangle().getY() - 1;
+                                if (initialY - newY >= moveDistanceIzquierda) {
+                                    movedInX = true;
+                                }
+                                car.getRectangle().setY(newY);
+                                car.getImageView().setLayoutY(newY);
+                            } else {
+                                car.getRectangle().setRotate(270);
+                                car.getImageView().setRotate(270);
+                                double newX = car.getRectangle().getX() - 1;
+                                if (newX < 0) {
+                                    resetCarPositionSur(car);
+                                } else {
+                                    car.getRectangle().setX(newX);
+                                    car.getImageView().setLayoutX(newX);
+                                }
+                            }
+                        }
+                        case "alantedir" -> {
+                            double newY = car.getRectangle().getY() - 1;
+                            if (newY < 0) {
+                                resetCarPositionSur(car);
+                            } else {
+                                car.getRectangle().setY(newY);
+                                car.getImageView().setLayoutY(newY);
+                            }
+                        }
+                        case "udir" -> {
+                            if (!movedInX) {
+                                double newY = car.getRectangle().getY() - 1;
+                                if (initialY - newY >= moveDistanceDerecha) {
+                                    movedInX = true;
+                                    car.getRectangle().setRotate(270);
+                                    car.getImageView().setRotate(270);
+                                }
+                                car.getRectangle().setY(newY);
+                                car.getImageView().setLayoutY(newY);
+                            } else if (!madeUTurn) {
+                                double newX = car.getRectangle().getX() - 1;
+                                if (initialX - newX >= curveRadius) {
+                                    madeUTurn = true;
+                                    car.getRectangle().setRotate(180);
+                                    car.getImageView().setRotate(180);
+                                }
+                                car.getRectangle().setX(newX);
+                                car.getImageView().setLayoutX(newX);
+                            } else {
+                                double newY = car.getRectangle().getY() + 1;
+                                if (newY > root.getHeight()) {
+                                    resetCarPositionSur(car);
+                                } else {
+                                    car.getRectangle().setY(newY);
+                                    car.getImageView().setLayoutY(newY);
+                                }
+                            }
+                        }
+                        case "derechadir" -> {
+                            if (!movedInX) {
+                                double newY = car.getRectangle().getY() - 1;
+                                if (initialY - newY >= moveDistanceDerecha) {
+                                    movedInX = true;
+                                }
+                                car.getRectangle().setY(newY);
+                                car.getImageView().setLayoutY(newY);
+                            } else {
+                                car.getRectangle().setRotate(90);
+                                car.getImageView().setRotate(90);
+                                double newX = car.getRectangle().getX() + 1;
+                                if (newX > root.getWidth()) {
+                                    resetCarPositionSur(car);
+                                } else {
+                                    car.getRectangle().setX(newX);
+                                    car.getImageView().setLayoutX(newX);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     };
     car.getAnimationTimer().stop();
+    car.setRunning(false);
     car.setAnimationTimer(timer);
     timer.start();
+    car.setRunning(true);
 }
 
-private void resetCarPositionEste(Car car) {
+
+    private void resetCarPositionEste(Car car) {
     car.getRectangle().setX(root.getWidth() );
     car.getRectangle().setY(este.getCenterY() + 370);
     car.getImageView().setLayoutX(car.getRectangle().getX());
@@ -563,9 +924,86 @@ private void resetCarPositionEste(Car car) {
         }
     };
     car.getAnimationTimer().stop();
+    car.setRunning(false);
     car.setAnimationTimer(timer);
     timer.start();
+    car.setRunning(true);
 }
+private void resetCarPositionOeste(Car car) {
+    car.getRectangle().setX(-50);
+    car.getRectangle().setY(oeste.getCenterY()+450);
+    car.getImageView().setLayoutX( car.getRectangle().getX());
+    car.getImageView().setLayoutY( car.getRectangle().getY());
+    car.getRectangle().setRotate(90);
+    car.getImageView().setRotate(90);
+    AnimationTimer timer = new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+            double newX = car.getRectangle().getX() + 1;
+            if (newX > root.getWidth()) {
+                newX = -0;
+            }
+            car.getRectangle().setX(newX);
+            car.getImageView().setLayoutX(newX);
+        }
+    };
+    car.getAnimationTimer().stop();
+    car.setRunning(false);
+    car.setAnimationTimer(timer);
+    timer.start();
+    car.setRunning(true);
+}
+    private void resetCarPositionNorte(Car car) {
+
+        car.getRectangle().setX(norte.getCenterX() +590);
+        car.getRectangle().setY(-50);
+        car.getImageView().setLayoutX(car.getRectangle().getX());
+        car.getImageView().setLayoutY(car.getRectangle().getY());
+        car.getRectangle().setRotate(180);
+        car.getImageView().setRotate(180);
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double newX = car.getRectangle().getY() + 1;
+                if (newX > root.getHeight()) {
+                    newX = -50;
+                }
+                car.getRectangle().setY(newX);
+                car.getImageView().setLayoutY(newX);
+            }
+        };
+        car.getAnimationTimer().stop();
+        car.setRunning(false);
+        car.setAnimationTimer(timer);
+        timer.start();
+        car.setRunning(true);
+
+    }
+    private void resetCarPositionSur(Car car) {
+        car.getRectangle().setX(sur.getCenterX() +670);
+        car.getRectangle().setY(root.getHeight());
+        car.getImageView().setLayoutX(car.getRectangle().getX());
+        car.getImageView().setLayoutY(car.getRectangle().getY());
+        car.getRectangle().setRotate(0);
+        car.getImageView().setRotate(0);
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double newX = car.getRectangle().getY() - 1;
+                if (newX < 0) {
+                    newX = root.getHeight();
+                }
+                car.getRectangle().setY(newX);
+                car.getImageView().setLayoutY(newX);
+            }
+        };
+        car.getAnimationTimer().stop();
+        car.setRunning(false);
+        car.setAnimationTimer(timer);
+        timer.start();
+        car.setRunning(true);
+
+    }
 
 
 

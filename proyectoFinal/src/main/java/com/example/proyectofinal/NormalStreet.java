@@ -59,6 +59,7 @@ public class NormalStreet {
     private Rectangle cruce;
 
     private int idcars = 0;
+    private int cicloNormal =0;
 
 
 
@@ -78,6 +79,9 @@ public class NormalStreet {
     private static final String[] CARS = {"redcar", "graycar", "whitecar"};
     private List<Car> cars = new ArrayList<>();
     private BlockingDeque<Car> colaInterseccion = new LinkedBlockingDeque<>(100);
+    private boolean bloquear = false;
+    private boolean ambulanciaPass = false;
+
 
     @FXML
     public void initialize() {
@@ -328,7 +332,7 @@ public class NormalStreet {
         Circle circle = (Circle) event.getSource();
         String circleId = circle.getId();
         System.out.println("Circle pressed: " + circleId);
-        addCar(circle.getId());
+        addCar(circle.getId(), false);
         direccion();
         este.setVisible(false);
         oeste.setVisible(false);
@@ -341,6 +345,19 @@ public class NormalStreet {
         Circle circle = (Circle) event.getSource();
         String circleId = circle.getId();
         System.out.println("Circle pressed: " + circleId);
+        if(circle.getId().equals("esteamb")) {
+            addCar("este", true);
+            direccion();
+        }else if(circle.getId().equals("oesteamb")){
+            addCar("oeste", true);
+            direccion();
+        }else if(circle.getId().equals("norteamb")){
+            addCar("norte", true);
+            direccion();
+        }else if(circle.getId().equals("suramb")){
+            addCar("sur", true);
+            direccion();
+        }
         esteamb.setVisible(false);
         oesteamb.setVisible(false);
         norteamb.setVisible(false);
@@ -358,73 +375,90 @@ public class NormalStreet {
         direccionPane.setVisible(true);
         direccionPane.toFront();
     }
+    //OJO
     private void correr(int id, String idDireccion){
         Car car = buscarCarroById(id);
-        if(car != null){
-            car.setDestino(idDireccion);
-        }
-        AnimationTimer timer = null;
-        switch (Objects.requireNonNull(car).getOrigen()){
-            case "este" ->{
-                timer = new AnimationTimer() {
-                    @Override
-                    public void handle(long now) {
-                        double newX = car.getRectangle().getX() - 1;
-                        if (newX < 0) {
-                            newX = root.getWidth();
-                        }
-                        car.getRectangle().setX(newX);
-                        car.getImageView().setLayoutX(newX);
-                    }
-                };
-                timer.start();
+            if(car != null){
+                car.setDestino(idDireccion);
+            if(car.isTipoEmergencia()){
+                System.out.println("======AMBULANCIAAAA");
+                cicloNormal = 1;
             }
-            case "oeste" -> {
-                timer = new AnimationTimer() {
-                    @Override
-                    public void handle(long now) {
-                        double newX = car.getRectangle().getX() + 1;
-                        if (newX > root.getWidth()) {
-                            newX = -0;
+            AnimationTimer timer = null;
+            switch (Objects.requireNonNull(car).getOrigen()){
+                case "este" ->{
+                    timer = new AnimationTimer() {
+                        @Override
+                        public void handle(long now) {
+                            double newX = car.getRectangle().getX() - 1;
+                            if (newX < 0) {
+                                newX = root.getWidth();
+                            }
+                            car.getRectangle().setX(newX);
+                            car.getImageView().setLayoutX(newX);
                         }
-                        car.getRectangle().setX(newX);
-                        car.getImageView().setLayoutX(newX);
-                    }
-                };
-                timer.start();
-            }
-            case "norte" -> {
-                timer = new AnimationTimer() {
-                    @Override
-                    public void handle(long now) {
-                        double newX = car.getRectangle().getY() + 1;
-                        if (newX > root.getHeight()) {
-                            newX = -50;
+                    };
+                    timer.start();
+    //                if(car.isTipoEmergencia()){
+    //                    cleanQueu(car);
+    //                }
+                }
+                case "oeste" -> {
+                    timer = new AnimationTimer() {
+                        @Override
+                        public void handle(long now) {
+                            double newX = car.getRectangle().getX() + 1;
+                            if (newX > root.getWidth()) {
+                                newX = -0;
+                            }
+                            car.getRectangle().setX(newX);
+                            car.getImageView().setLayoutX(newX);
                         }
-                        car.getRectangle().setY(newX);
-                        car.getImageView().setLayoutY(newX);
-                    }
-                };
-                timer.start();
-            }
-            case "sur" -> {
-                timer = new AnimationTimer() {
-                    @Override
-                    public void handle(long now) {
-                        double newX = car.getRectangle().getY() - 1;
-                        if (newX < 0) {
-                            newX = root.getHeight();
+                    };
+                    timer.start();
+    //                if(car.isTipoEmergencia()){
+    //                    cleanQueu(car);
+    //                }
+                }
+                case "norte" -> {
+                    timer = new AnimationTimer() {
+                        @Override
+                        public void handle(long now) {
+                            double newX = car.getRectangle().getY() + 1;
+                            if (newX > root.getHeight()) {
+                                newX = -50;
+                            }
+                            car.getRectangle().setY(newX);
+                            car.getImageView().setLayoutY(newX);
                         }
-                        car.getRectangle().setY(newX);
-                        car.getImageView().setLayoutY(newX);
-                    }
-                };
-                timer.start();
+                    };
+                    timer.start();
+    //                if(car.isTipoEmergencia()){
+    //                    cleanQueu(car);
+    //                }
+                }
+                case "sur" -> {
+                    timer = new AnimationTimer() {
+                        @Override
+                        public void handle(long now) {
+                            double newX = car.getRectangle().getY() - 1;
+                            if (newX < 0) {
+                                newX = root.getHeight();
+                            }
+                            car.getRectangle().setY(newX);
+                            car.getImageView().setLayoutY(newX);
+                        }
+                    };
+                    timer.start();
+    //                if(car.isTipoEmergencia()){
+    //                    //cleanQueu(car);
+    //                }
+                }
             }
-        }
-        if(timer != null){
-            car.setAnimationTimer(timer);
-            car.setRunning(true);
+            if(timer != null){
+                car.setAnimationTimer(timer);
+                car.setRunning(true);
+            }
         }
     }
 
@@ -441,6 +475,11 @@ public class NormalStreet {
                 } else {
                     if (car.isInCrossing()) {
                         car.setInCrossing(false);
+                        if(car.isTipoEmergencia()) {
+                            ambulanciaPass = true;
+                            System.out.println("+++++++++++++++++++++++++++++++++++");
+                            cicloNormal = 0;
+                        }
                         System.out.println("Salió del cruce id: " + car.getId());
                         //sacarDeCola();
                     }
@@ -461,20 +500,45 @@ public class NormalStreet {
 //            pause.play();
         }
     }
-    private void tiempoDeCola() {
-            Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(500), event -> {
-                int crossing= 0;
-                for (Car c :cars) {
-                    if(c.isInCrossing()){
-                        crossing++;
+    private void sacarDeColaHayAmbulancia(){
+        for (Car car : cars) {
+            if (!ambulanciaPass) {
+                if (car.getOrigen().equals(diramb())) {
+                    if(car.getAnimationTimer() != null) {
+                        car.getAnimationTimer().start();
+                        car.setRunning(true);
+                        colaInterseccion.remove(car);
                     }
                 }
-                if(crossing == 0){
-                    sacarDeCola();
+
+            }
+        }
+    }
+    private void tiempoDeCola() {
+        Timeline collisionChecker = new Timeline();
+
+        collisionChecker.getKeyFrames().add(new KeyFrame(Duration.millis(500), event -> {
+            System.out.println(cicloNormal);
+            int crossing = 0;
+            for (Car c : cars) {
+                if (c.isInCrossing()) {
+                    crossing++;
                 }
-            }));
-            collisionChecker.setCycleCount(Timeline.INDEFINITE);
-            collisionChecker.play();
+            }
+            if (crossing == 0 && cicloNormal == 0) {
+                sacarDeCola();
+            }else if(crossing == 0 && hayAmbulancia() > 0){
+                sacarDeColaHayAmbulancia();
+            }
+//            if (!ambulanciaPass && hayAmbulancia() > 0) {
+//                collisionChecker.stop();
+//            }else{
+//                collisionChecker.play();
+//            }
+        }));
+
+        collisionChecker.setCycleCount(Timeline.INDEFINITE);
+        collisionChecker.play();
     }
 //    private void observador(){
 //        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -504,53 +568,125 @@ public class NormalStreet {
 //        }
 //        return null;
 //    }
-    private void llegada(){
-        Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            for (Car car : cars) {
-                if(car.getRectangle().getBoundsInParent().intersects(estePare.getBoundsInParent())){
-                    if (!car.isPare()) {
-                        System.out.println("Llego al stop Este id: " + car.getId());
-                        car.setPare(true);
-                        car.getAnimationTimer().stop();
-                        car.setRunning(false);
-                        colaInterseccion.add(car);
-                    }
-                    //car.getAnimationTimer().stop();
-                }else if (car.getRectangle().getBoundsInParent().intersects(oestePare.getBoundsInParent())){
-                    if (!car.isPare()) {
-                        System.out.println("Llego al stop Oeste id: " + car.getId());
-                        car.setPare(true);
-                        car.getAnimationTimer().stop();
-                        car.setRunning(false);
-                        colaInterseccion.add(car);
-                    }
-                }else if (car.getRectangle().getBoundsInParent().intersects(nortePare.getBoundsInParent())){
-                    if (!car.isPare()) {
-                        System.out.println("Llego al stop Norte id: " + car.getId());
-                        car.setPare(true);
-                        car.getAnimationTimer().stop();
-                        car.setRunning(false);
-                        colaInterseccion.add(car);
-                    }
-                }else if (car.getRectangle().getBoundsInParent().intersects(surPare.getBoundsInParent())) {
-                    if (!car.isPare()) {
-                        System.out.println("Llego al stop Sur id: " + car.getId());
-                        car.setPare(true);
-                        car.getAnimationTimer().stop();
-                        car.setRunning(false);
-                        colaInterseccion.add(car);
-                    }
-                }else{
-                    if (car.isPare()) {
-                        car.setPare(false);
-                    }
+private void llegada() {
+    Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
+        for (Car car : cars) {
+            if (car.getRectangle().getBoundsInParent().intersects(estePare.getBoundsInParent())) {
+                if (!car.isPare()) {
+                    System.out.println("Llego al stop Este id: " + car.getId());
+                    car.setPare(true);
+                    car.getAnimationTimer().stop();
+                    car.setRunning(false);
+                    colaInterseccion.add(car);
+                }
+            } else if (car.getRectangle().getBoundsInParent().intersects(oestePare.getBoundsInParent())) {
+                if (!car.isPare()) {
+                    System.out.println("Llego al stop Oeste id: " + car.getId());
+                    car.setPare(true);
+                    car.getAnimationTimer().stop();
+                    car.setRunning(false);
+                    colaInterseccion.add(car);
+                }
+            } else if (car.getRectangle().getBoundsInParent().intersects(nortePare.getBoundsInParent())) {
+                if (!car.isPare()) {
+                    System.out.println("Llego al stop Norte id: " + car.getId());
+                    car.setPare(true);
+                    car.getAnimationTimer().stop();
+                    car.setRunning(false);
+                    colaInterseccion.add(car);
+                }
+            } else if (car.getRectangle().getBoundsInParent().intersects(surPare.getBoundsInParent())) {
+                if (!car.isPare()) {
+                    System.out.println("Llego al stop Sur id: " + car.getId());
+                    car.setPare(true);
+                    car.getAnimationTimer().stop();
+                    car.setRunning(false);
+                    colaInterseccion.add(car);
+                }
+            } else {
+                if (car.isPare()) {
+                    car.setPare(false);
                 }
             }
+//            String stopCar = "";
+//
+//            if (!ambulanciaPass) {
+//                if (diramb().equals("este") && !car.getOrigen().equals("este")) {
+//                    stopCar = "este";
+//                } else if (diramb().equals("oeste") && !car.getOrigen().equals("oeste")) {
+//                    stopCar = "oeste";
+//                } else if (diramb().equals("norte") && !car.getOrigen().equals("norte")) {
+//                    stopCar = "norte";
+//                } else if (diramb().equals("sur") && !car.getOrigen().equals("sur")) {
+//                    stopCar = "sur";
+//                }
+//            }
+//
+//            if (!stopCar.equals("")) {
+//                if (car.getRectangle().getBoundsInParent().intersects(estePare.getBoundsInParent()) && !stopCar.equals("este") ||
+//                        car.getRectangle().getBoundsInParent().intersects(oestePare.getBoundsInParent()) && !stopCar.equals("oeste") ||
+//                        car.getRectangle().getBoundsInParent().intersects(nortePare.getBoundsInParent())&& !stopCar.equals("norte") ||
+//                        car.getRectangle().getBoundsInParent().intersects(surPare.getBoundsInParent()) && !stopCar.equals("oeste") ) {
+//                    //colaInterseccion.clear();
+//                        //car.setPare(true);
+//                    System.out.println("---------------------------------------------");
+//                    if(!diramb().equals(car.getOrigen())) {
+//                        car.getAnimationTimer().stop();
+//                        car.setRunning(false);
+//                    }else{
+//                        car.getAnimationTimer().start();
+//                        car.setRunning(true);
+//                    }
+//                        //colaInterseccion.add(car);
+//
+//                }
+//            } else {
+//                if (!ambulanciaPass || hayAmbulancia() == 0 ){
+//                    if (car.getRectangle().getBoundsInParent().intersects(estePare.getBoundsInParent())) {
+//                        if (!car.isPare() && !colaInterseccion.contains(car)) {
+//                            System.out.println("Llego al stop Este id: " + car.getId());
+//                            car.setPare(true);
+//                            car.getAnimationTimer().stop();
+//                            car.setRunning(false);
+//                            colaInterseccion.add(car);
+//                        }
+//                    } else if (car.getRectangle().getBoundsInParent().intersects(oestePare.getBoundsInParent())) {
+//                        if (!car.isPare()  && !colaInterseccion.contains(car)) {
+//                            System.out.println("Llego al stop Oeste id: " + car.getId());
+//                            car.setPare(true);
+//                            car.getAnimationTimer().stop();
+//                            car.setRunning(false);
+//                            colaInterseccion.add(car);
+//                        }
+//                    } else if (car.getRectangle().getBoundsInParent().intersects(nortePare.getBoundsInParent())) {
+//                        if (!car.isPare()  && !colaInterseccion.contains(car)) {
+//                            System.out.println("Llego al stop Norte id: " + car.getId());
+//                            car.setPare(true);
+//                            car.getAnimationTimer().stop();
+//                            car.setRunning(false);
+//                            colaInterseccion.add(car);
+//                        }
+//                    } else if (car.getRectangle().getBoundsInParent().intersects(surPare.getBoundsInParent())) {
+//                        if (!car.isPare() && !colaInterseccion.contains(car)) {
+//                            System.out.println("Llego al stop Sur id: " + car.getId());
+//                            car.setPare(true);
+//                            car.getAnimationTimer().stop();
+//                            car.setRunning(false);
+//                            colaInterseccion.add(car);
+//                        }
+//                    } else {
+//                        if (car.isPare()) {
+//                            car.setPare(false);
+//                        }
+//                    }
+//                }
+//            }
+        }
+    }));
+    collisionChecker.setCycleCount(Timeline.INDEFINITE);
+    collisionChecker.play();
+}
 
-        }));
-        collisionChecker.setCycleCount(Timeline.INDEFINITE);
-        collisionChecker.play();
-    }
 
 
 private void crusando(Car car) {
@@ -897,8 +1033,10 @@ private void crusando(Car car) {
             }
         }
     };
-    car.getAnimationTimer().stop();
-    car.setRunning(false);
+    if(car.getAnimationTimer() != null){
+        car.getAnimationTimer().stop();
+        car.setRunning(false);
+    }
     car.setAnimationTimer(timer);
     timer.start();
     car.setRunning(true);
@@ -906,112 +1044,138 @@ private void crusando(Car car) {
 
 
     private void resetCarPositionEste(Car car) {
-    car.getRectangle().setX(root.getWidth() );
-    car.getRectangle().setY(este.getCenterY() + 370);
-    car.getImageView().setLayoutX(car.getRectangle().getX());
-    car.getImageView().setLayoutY(car.getRectangle().getY());
-    car.getRectangle().setRotate(270);
-    car.getImageView().setRotate(270);
-    AnimationTimer timer = new AnimationTimer() {
-        @Override
-        public void handle(long now) {
-            double newX = car.getRectangle().getX() - 1;
-            if (newX < 0) {
-                newX = root.getWidth();
-            }
-            car.getRectangle().setX(newX);
-            car.getImageView().setLayoutX(newX);
+        if(!car.isTipoEmergencia()) {
+            car.getRectangle().setX(root.getWidth());
+            car.getRectangle().setY(este.getCenterY() + 370);
+            car.getImageView().setLayoutX(car.getRectangle().getX());
+            car.getImageView().setLayoutY(car.getRectangle().getY());
+            car.getRectangle().setRotate(270);
+            car.getImageView().setRotate(270);
+            AnimationTimer timer = new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    double newX = car.getRectangle().getX() - 1;
+                    if (newX < 0) {
+                        newX = root.getWidth();
+                    }
+                    car.getRectangle().setX(newX);
+                    car.getImageView().setLayoutX(newX);
+                }
+            };
+            car.getAnimationTimer().stop();
+            car.setRunning(false);
+            car.setAnimationTimer(timer);
+            timer.start();
+            car.setRunning(true);
+        }else{
+            car.getAnimationTimer().stop();
+            car.setRunning(false);
+            delCarAmbulancia(car);
         }
-    };
-    car.getAnimationTimer().stop();
-    car.setRunning(false);
-    car.setAnimationTimer(timer);
-    timer.start();
-    car.setRunning(true);
 }
 private void resetCarPositionOeste(Car car) {
-    car.getRectangle().setX(-50);
-    car.getRectangle().setY(oeste.getCenterY()+450);
-    car.getImageView().setLayoutX( car.getRectangle().getX());
-    car.getImageView().setLayoutY( car.getRectangle().getY());
-    car.getRectangle().setRotate(90);
-    car.getImageView().setRotate(90);
-    AnimationTimer timer = new AnimationTimer() {
-        @Override
-        public void handle(long now) {
-            double newX = car.getRectangle().getX() + 1;
-            if (newX > root.getWidth()) {
-                newX = -0;
-            }
-            car.getRectangle().setX(newX);
-            car.getImageView().setLayoutX(newX);
-        }
-    };
-    car.getAnimationTimer().stop();
-    car.setRunning(false);
-    car.setAnimationTimer(timer);
-    timer.start();
-    car.setRunning(true);
-}
-    private void resetCarPositionNorte(Car car) {
-
-        car.getRectangle().setX(norte.getCenterX() +590);
-        car.getRectangle().setY(-50);
-        car.getImageView().setLayoutX(car.getRectangle().getX());
-        car.getImageView().setLayoutY(car.getRectangle().getY());
-        car.getRectangle().setRotate(180);
-        car.getImageView().setRotate(180);
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                double newX = car.getRectangle().getY() + 1;
-                if (newX > root.getHeight()) {
-                    newX = -50;
+        if(!car.isTipoEmergencia()){
+            car.getRectangle().setX(-50);
+            car.getRectangle().setY(oeste.getCenterY()+450);
+            car.getImageView().setLayoutX( car.getRectangle().getX());
+            car.getImageView().setLayoutY( car.getRectangle().getY());
+            car.getRectangle().setRotate(90);
+            car.getImageView().setRotate(90);
+            AnimationTimer timer = new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    double newX = car.getRectangle().getX() + 1;
+                    if (newX > root.getWidth()) {
+                        newX = -0;
+                    }
+                    car.getRectangle().setX(newX);
+                    car.getImageView().setLayoutX(newX);
                 }
-                car.getRectangle().setY(newX);
-                car.getImageView().setLayoutY(newX);
-            }
-        };
+            };
+            car.getAnimationTimer().stop();
+            car.setRunning(false);
+            car.setAnimationTimer(timer);
+            timer.start();
+            car.setRunning(true);
+    }else{
         car.getAnimationTimer().stop();
         car.setRunning(false);
-        car.setAnimationTimer(timer);
-        timer.start();
-        car.setRunning(true);
+        delCarAmbulancia(car);
+    }
+}
+    private void resetCarPositionNorte(Car car) {
+        if(!car.isTipoEmergencia()) {
+            car.getRectangle().setX(norte.getCenterX() + 590);
+            car.getRectangle().setY(-50);
+            car.getImageView().setLayoutX(car.getRectangle().getX());
+            car.getImageView().setLayoutY(car.getRectangle().getY());
+            car.getRectangle().setRotate(180);
+            car.getImageView().setRotate(180);
+            AnimationTimer timer = new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    double newX = car.getRectangle().getY() + 1;
+                    if (newX > root.getHeight()) {
+                        newX = -50;
+                    }
+                    car.getRectangle().setY(newX);
+                    car.getImageView().setLayoutY(newX);
+                }
+            };
+            car.getAnimationTimer().stop();
+            car.setRunning(false);
+            car.setAnimationTimer(timer);
+            timer.start();
+            car.setRunning(true);
+        }else{
+            car.getAnimationTimer().stop();
+            car.setRunning(false);
+            delCarAmbulancia(car);
+        }
 
     }
     private void resetCarPositionSur(Car car) {
-        car.getRectangle().setX(sur.getCenterX() +670);
-        car.getRectangle().setY(root.getHeight());
-        car.getImageView().setLayoutX(car.getRectangle().getX());
-        car.getImageView().setLayoutY(car.getRectangle().getY());
-        car.getRectangle().setRotate(0);
-        car.getImageView().setRotate(0);
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                double newX = car.getRectangle().getY() - 1;
-                if (newX < 0) {
-                    newX = root.getHeight();
+        if(!car.isTipoEmergencia()) {
+            car.getRectangle().setX(sur.getCenterX() + 670);
+            car.getRectangle().setY(root.getHeight());
+            car.getImageView().setLayoutX(car.getRectangle().getX());
+            car.getImageView().setLayoutY(car.getRectangle().getY());
+            car.getRectangle().setRotate(0);
+            car.getImageView().setRotate(0);
+            AnimationTimer timer = new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    double newX = car.getRectangle().getY() - 1;
+                    if (newX < 0) {
+                        newX = root.getHeight();
+                    }
+                    car.getRectangle().setY(newX);
+                    car.getImageView().setLayoutY(newX);
                 }
-                car.getRectangle().setY(newX);
-                car.getImageView().setLayoutY(newX);
-            }
-        };
-        car.getAnimationTimer().stop();
-        car.setRunning(false);
-        car.setAnimationTimer(timer);
-        timer.start();
-        car.setRunning(true);
+            };
+            car.getAnimationTimer().stop();
+            car.setRunning(false);
+            car.setAnimationTimer(timer);
+            timer.start();
+            car.setRunning(true);
+        }else{
+            car.getAnimationTimer().stop();
+            car.setRunning(false);
+            delCarAmbulancia(car);
+        }
 
     }
 
 
 
 
-    private void addCar(String id) {
+    private void addCar(String id, boolean ambulancia) {
         String carImage = CARS[new Random().nextInt(CARS.length)];
         Image image = new Image("file:src/main/resources/com/example/proyectofinal/cars/" + carImage + ".png");
         ImageView carritoImagen = new ImageView(image);
+        if(ambulancia){
+            carritoImagen = new ImageView(new Image("file:src/main/resources/com/example/proyectofinal/cars/ambulanciaShort.png"));
+        }
         carritoImagen.setFitHeight(100);
         carritoImagen.setFitWidth(50);
         Rectangle carrito = new Rectangle(50, 100);
@@ -1050,11 +1214,38 @@ private void resetCarPositionOeste(Car car) {
                 carritoImagen.setRotate(0);
             }
         }
-        Car car = new Car(carritoImagen, carrito, idcars++,false,id);
+        Car car = new Car(carritoImagen, carrito, idcars++,ambulancia,id);
         System.out.println(idcars);
         cars.add(car);
         root.getChildren().addAll(carrito, carritoImagen);
+        if(ambulancia){
+            cicloNormal = 1;
+        }
 
+    }
+    public void cleanQueu(Car car){
+        if (car.isTipoEmergencia()){
+            for (Car c:colaInterseccion){
+                if(c.isPare() && car.getOrigen().equals(c.getOrigen())){
+                    colaInterseccion.remove(c);
+                    c.getAnimationTimer().start();
+                    c.setRunning(true);
+                    System.out.println("Desbloqueando id: "+c.getId());
+                }
+
+            }
+
+        }
+        bloquear = false;
+    }
+    public String diramb(){
+        for (Car c:cars){
+            if(c.isTipoEmergencia()) {
+                    return c.getOrigen();
+            }
+
+        }
+        return "all";
     }
     //        AnimationTimer timer = new AnimationTimer() {
 //            @Override
@@ -1077,5 +1268,25 @@ private void resetCarPositionOeste(Car car) {
             }
         }
         return car;
+    }
+    private void delCarAmbulancia(Car car){
+        if(car.isTipoEmergencia()){
+            root.getChildren().remove(car.getRectangle());
+            root.getChildren().remove(car.getImageView());
+            ambulanciaPass = false;
+            cars.remove(car);
+            cicloNormal = 0;
+            System.out.println("imprimiendoooo");
+        }
+    }
+    private int hayAmbulancia(){
+        int temp =0;
+
+        for (Car c:cars){
+            if(c.isTipoEmergencia()){
+                temp++;
+            }
+        }
+        return temp;
     }
 }

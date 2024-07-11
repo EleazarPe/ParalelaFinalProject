@@ -342,6 +342,9 @@ public class NormalStreet {
                         car.setInCrossing(true);
                         crusando(car);
                     }
+                    if (car.isTipoEmergencia()){
+                        cicloNormal = 0;
+                    }
                 } else {
                     if (car.isInCrossing()) {
                         car.setInCrossing(false);
@@ -378,10 +381,22 @@ public class NormalStreet {
             }
         }
     }
+
+    private boolean verificadorCruce(){
+
+        for (Car car : cars){
+            if (car.isInCrossing() && !car.getOrigen().equals(diramb())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private void tiempoDeCola() {
         Timeline collisionChecker = new Timeline();
 
-        collisionChecker.getKeyFrames().add(new KeyFrame(Duration.millis(500), event -> {
+        collisionChecker.getKeyFrames().add(new KeyFrame(Duration.millis(300), event -> {
 
             int crossing = 0;
             for (Car c : cars) {
@@ -391,7 +406,7 @@ public class NormalStreet {
             }
             if (crossing == 0 && cicloNormal == 0) {
                 sacarDeCola();
-            }else if(crossing == 0 && hayAmbulancia() > 0){
+            }else if(cicloNormal == 1){
                 sacarDeColaHayAmbulancia();
             }
         }));

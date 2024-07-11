@@ -130,37 +130,29 @@ public class NormalStreet {
 //                            }
                 } else if((car1.getRectangle().getRotate() == 0 && car2.getRectangle().getRotate() == 0)){
                     if (car1.getRectangle().getY() < car2.getRectangle().getY() && car2.getRectangle().getY() - car1.getRectangle().getY()  < 110) {
-//                                if(!car1.isPare()){
                         if (car2.getAnimationTimer() != null) {
                             car2.getAnimationTimer().stop();
                             car2.setRunning(false);
                         }
-                        //}
 
                     }
                 }else if((car1.getRectangle().getRotate() == 90 && car2.getRectangle().getRotate() == 90)){
                     if (car1.getRectangle().getX() > car2.getRectangle().getX() &&  car1.getRectangle().getX() - car2.getRectangle().getX()  < 110) {
-//                                if(!car1.isPare()){
                         if (car2.getAnimationTimer() != null) {
                             car2.getAnimationTimer().stop();
                             car2.setRunning(false);
                         }
-                        //}
 
                     }
 
                 }else if((car1.getRectangle().getRotate() == 270 && car2.getRectangle().getRotate() == 270)){
                     if (car1.getRectangle().getX() < car2.getRectangle().getX() && car2.getRectangle().getX() - car1.getRectangle().getX()   < 110) {
-//                                if(!car1.isPare()){
                         if (car2.getAnimationTimer() != null) {
                             car2.getAnimationTimer().stop();
                             car2.setRunning(false);
                         }
-                        //}
-
                     }
                 }
-                //}
             }
         }
     }
@@ -220,47 +212,6 @@ public class NormalStreet {
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
     }
-//    private void mover(){
-//        Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
-//
-//            for(Car car: cars){
-//                    if(!car.isRunning()){
-//                        if(!car.isInCrossing()) {
-//                            if(car.getAnimationTimer() != null) {
-//                                if(car.isPare()) {
-//                                    int i = 0;
-//                                    for (Car c : cars) {
-//                                        if (c.isInCrossing()) {
-//                                            i++;
-//                                        }
-//                                    }
-//                                    if (i == 0) {
-//                                        car.getAnimationTimer().start();
-//                                        car.setRunning(true);
-//                                    }
-//                                }else{
-//                                    car.getAnimationTimer().start();
-//                                    car.setRunning(true);
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//            }
-//        }));
-//        collisionChecker.setCycleCount(Timeline.INDEFINITE);
-//        collisionChecker.play();
-//    }
-//    private int conseguirPosicion(Car car){
-//        int posicion =0;
-//        for(Car carBlockingDeque: colaInterseccion){
-//            if (car.equals(carBlockingDeque)) {
-//                return posicion;
-//            }
-//            posicion++;
-//        }
-//        return 0;
-//    }
 
     @FXML
     public void handleCircleClick(MouseEvent event) {
@@ -310,7 +261,7 @@ public class NormalStreet {
         direccionPane.setVisible(true);
         direccionPane.toFront();
     }
-    //OJO
+
     private void correr(int id, String idDireccion){
         Car car = buscarCarroById(id);
             if(car != null){
@@ -334,9 +285,6 @@ public class NormalStreet {
                         }
                     };
                     timer.start();
-    //                if(car.isTipoEmergencia()){
-    //                    cleanQueu(car);
-    //                }
                 }
                 case "oeste" -> {
                     timer = new AnimationTimer() {
@@ -351,9 +299,6 @@ public class NormalStreet {
                         }
                     };
                     timer.start();
-    //                if(car.isTipoEmergencia()){
-    //                    cleanQueu(car);
-    //                }
                 }
                 case "norte" -> {
                     timer = new AnimationTimer() {
@@ -368,9 +313,6 @@ public class NormalStreet {
                         }
                     };
                     timer.start();
-    //                if(car.isTipoEmergencia()){
-    //                    cleanQueu(car);
-    //                }
                 }
                 case "sur" -> {
                     timer = new AnimationTimer() {
@@ -385,9 +327,6 @@ public class NormalStreet {
                         }
                     };
                     timer.start();
-    //                if(car.isTipoEmergencia()){
-    //                    //cleanQueu(car);
-    //                }
                 }
             }
             if(timer != null){
@@ -412,11 +351,9 @@ public class NormalStreet {
                         car.setInCrossing(false);
                         if(car.isTipoEmergencia()) {
                             ambulanciaPass = true;
-                            System.out.println("+++++++++++++++++++++++++++++++++++");
                             cicloNormal = 0;
                         }
                         System.out.println("Salió del cruce id: " + car.getId());
-                        //sacarDeCola();
                     }
                 }
             }
@@ -430,9 +367,6 @@ public class NormalStreet {
             Car car = colaInterseccion.poll();
             car.getAnimationTimer().start();
             car.setRunning(true);
-//            PauseTransition pause = new PauseTransition(Duration.seconds(1));
-//            pause.setOnFinished(event -> car.getAnimationTimer().start());
-//            pause.play();
         }
     }
     private void sacarDeColaHayAmbulancia(){
@@ -445,7 +379,6 @@ public class NormalStreet {
                         colaInterseccion.remove(car);
                     }
                 }
-
             }
         }
     }
@@ -453,7 +386,7 @@ public class NormalStreet {
         Timeline collisionChecker = new Timeline();
 
         collisionChecker.getKeyFrames().add(new KeyFrame(Duration.millis(500), event -> {
-            System.out.println(cicloNormal);
+
             int crossing = 0;
             for (Car c : cars) {
                 if (c.isInCrossing()) {

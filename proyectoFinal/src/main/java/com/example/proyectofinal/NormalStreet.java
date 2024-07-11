@@ -100,42 +100,35 @@ public class NormalStreet {
         timeline();
         llegada();
         tiempoDeCola();
-        cercania2();
+        cercania();
         mover();
     }
 
     private void temporal(){
+
         for (int i = 0; i < cars.size(); i++) {
             Car car1 = cars.get(i);
+
             for (int j = 0; j < cars.size(); j++) {
                 if (i == j) continue;
                 Car car2 = cars.get(j);
-                //if (car1.getRectangle().getBoundsInParent().intersects(car2.getRectangle().getBoundsInParent())) {
 
                 if ((car1.getRectangle().getRotate() == 180 && car2.getRectangle().getRotate() == 180)) {
-                    //System.out.println("Bajando");
                     if (car1.getRectangle().getY() > car2.getRectangle().getY() && car1.getRectangle().getY() - car2.getRectangle().getY() < 110) {
-//                                if(!car1.isPare()){
                         if (car2.getAnimationTimer() != null) {
                             car2.getAnimationTimer().stop();
                             car2.setRunning(false);
                         }
-                        //}
+                    }
 
-                    } //else {
-//                                if (car1.getAnimationTimer() != null) {
-//                                      car1.getAnimationTimer().stop();
-//                                      car1.setRunning(false);
-//                                }
-//                            }
                 } else if((car1.getRectangle().getRotate() == 0 && car2.getRectangle().getRotate() == 0)){
                     if (car1.getRectangle().getY() < car2.getRectangle().getY() && car2.getRectangle().getY() - car1.getRectangle().getY()  < 110) {
                         if (car2.getAnimationTimer() != null) {
                             car2.getAnimationTimer().stop();
                             car2.setRunning(false);
                         }
-
                     }
+
                 }else if((car1.getRectangle().getRotate() == 90 && car2.getRectangle().getRotate() == 90)){
                     if (car1.getRectangle().getX() > car2.getRectangle().getX() &&  car1.getRectangle().getX() - car2.getRectangle().getX()  < 110) {
                         if (car2.getAnimationTimer() != null) {
@@ -153,10 +146,12 @@ public class NormalStreet {
                         }
                     }
                 }
+
             }
         }
     }
-    private boolean temporal2(Car carro){
+
+    private boolean moveChecker(Car carro){
         for (int i = 0; i < cars.size(); i++) {
             Car car1 = cars.get(i);
             if (car1.equals(carro)) {
@@ -183,7 +178,7 @@ public class NormalStreet {
         return true;
     }
 
-    private void cercania2() {
+    private void cercania() {
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
             temporal();
         }));
@@ -198,7 +193,7 @@ public class NormalStreet {
                     if(!car.isInCrossing()) {
                         if(car.getAnimationTimer() != null) {
                             if(!car.isPare()) {
-                                if(temporal2(car)) {
+                                if(moveChecker(car)) {
                                     car.getAnimationTimer().start();
                                     car.setRunning(true);
                                 }
@@ -206,8 +201,8 @@ public class NormalStreet {
                         }
                     }
                 }
-
             }
+
         }));
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
@@ -271,6 +266,7 @@ public class NormalStreet {
                 cicloNormal = 1;
             }
             AnimationTimer timer = null;
+
             switch (Objects.requireNonNull(car).getOrigen()){
                 case "este" ->{
                     timer = new AnimationTimer() {
@@ -292,7 +288,7 @@ public class NormalStreet {
                         public void handle(long now) {
                             double newX = car.getRectangle().getX() + 1;
                             if (newX > root.getWidth()) {
-                                newX = -0;
+                                newX = -100;
                             }
                             car.getRectangle().setX(newX);
                             car.getImageView().setLayoutX(newX);
@@ -304,12 +300,12 @@ public class NormalStreet {
                     timer = new AnimationTimer() {
                         @Override
                         public void handle(long now) {
-                            double newX = car.getRectangle().getY() + 1;
-                            if (newX > root.getHeight()) {
-                                newX = -50;
+                            double newY = car.getRectangle().getY() + 1;
+                            if (newY > root.getHeight()) {
+                                newY = -50;
                             }
-                            car.getRectangle().setY(newX);
-                            car.getImageView().setLayoutY(newX);
+                            car.getRectangle().setY(newY);
+                            car.getImageView().setLayoutY(newY);
                         }
                     };
                     timer.start();
@@ -318,12 +314,12 @@ public class NormalStreet {
                     timer = new AnimationTimer() {
                         @Override
                         public void handle(long now) {
-                            double newX = car.getRectangle().getY() - 1;
-                            if (newX < 0) {
-                                newX = root.getHeight();
+                            double newY = car.getRectangle().getY() - 1;
+                            if (newY < 0) {
+                                newY = root.getHeight();
                             }
-                            car.getRectangle().setY(newX);
-                            car.getImageView().setLayoutY(newX);
+                            car.getRectangle().setY(newY);
+                            car.getImageView().setLayoutY(newY);
                         }
                     };
                     timer.start();
@@ -398,44 +394,12 @@ public class NormalStreet {
             }else if(crossing == 0 && hayAmbulancia() > 0){
                 sacarDeColaHayAmbulancia();
             }
-//            if (!ambulanciaPass && hayAmbulancia() > 0) {
-//                collisionChecker.stop();
-//            }else{
-//                collisionChecker.play();
-//            }
         }));
 
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
     }
-//    private void observador(){
-//        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-//        AtomicLong lastChangeTime = new AtomicLong(System.currentTimeMillis());
-//        //scheduler.scheduleAtFixedRate(Objects.requireNonNull(checkQueue(lastChangeTime)), 0, 1, TimeUnit.SECONDS);
-//    }
-//    private void monitorQueue( long idleTimeMillis) {
-//        long startTime = System.currentTimeMillis();
-//
-//        while (true) {
-//
-//            if (colaInterseccion.isEmpty()) {
-//                long currentTime = System.currentTimeMillis();
-//                if (currentTime - startTime >= idleTimeMillis) {
-//                    System.out.println("Sacando de cola");
-//                    sacarDeCola();
-//                }
-//            } else {
-//                startTime = System.currentTimeMillis();
-//            }
-//        }
-//    }
-//    private Runnable checkQueue(AtomicLong lastChangeTime) {
-//        long currentTime = System.currentTimeMillis();
-//        if (currentTime - lastChangeTime.get() >= 2000) {
-//            sacarDeCola();
-//        }
-//        return null;
-//    }
+
 private void llegada() {
     Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
         for (Car car : cars) {
@@ -594,7 +558,7 @@ private void crusando(Car car) {
                         }
                         case "alantedir" -> {
                             double newX = car.getRectangle().getX() - 1;
-                            if (newX < 0) {
+                            if (newX < -100) {
                                 resetCarPositionEste(car);
                             } else {
                                 car.getRectangle().setX(newX);
@@ -1091,21 +1055,7 @@ private void resetCarPositionOeste(Car car) {
         }
 
     }
-    public void cleanQueu(Car car){
-        if (car.isTipoEmergencia()){
-            for (Car c:colaInterseccion){
-                if(c.isPare() && car.getOrigen().equals(c.getOrigen())){
-                    colaInterseccion.remove(c);
-                    c.getAnimationTimer().start();
-                    c.setRunning(true);
-                    System.out.println("Desbloqueando id: "+c.getId());
-                }
 
-            }
-
-        }
-        //bloquear = false;
-    }
     public String diramb(){
         for (Car c:cars){
             if(c.isTipoEmergencia()) {
@@ -1115,18 +1065,7 @@ private void resetCarPositionOeste(Car car) {
         }
         return "all";
     }
-    //        AnimationTimer timer = new AnimationTimer() {
-//            @Override
-//            public void handle(long now) {
-//                double newX = cars.get(0).getRectangle().getY() + 2;
-//                if (newX > root.getHeight()) {
-//                    newX = -50;
-//                }
-//                cars.get(0).getRectangle().setY(newX);
-//                cars.get(0).getImageView().setLayoutY(newX);
-//            }
-//        };
-//        timer.start();
+
     private Car buscarCarroById(int id){
         Car car = null;
         for(Car c : cars){

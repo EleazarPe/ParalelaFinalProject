@@ -73,8 +73,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="Agregar">
             <items>
-                <MenuItem fx:id="agregarAmbulancia" mnemonicParsing="false" text="Ambulancia" />
                 <MenuItem fx:id="agregarCarrito" mnemonicParsing="false" text="Carro" />
+                <MenuItem fx:id="agregarAmbulancia" mnemonicParsing="false" text="Ambulancia" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Opciones">

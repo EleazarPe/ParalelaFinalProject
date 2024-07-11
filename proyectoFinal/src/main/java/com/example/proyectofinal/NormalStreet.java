@@ -61,25 +61,9 @@ public class NormalStreet {
     private int idcars = 0;
     private int cicloNormal =0;
 
-
-
-//    private double carritoX = 0;
-//    private double carritoY = 0;
-//
-//    private double velocityX = 0;
-//    private double velocityY = 0;
-//
-//    private final double acceleration = 0.1;
-//    private final double maxSpeed = 5;
-//    private final double deceleration = 0.05;
-//
-//    private double currentAngle = 0;
-//
-//    private Set<String> pressedKeys = new HashSet<>();
     private static final String[] CARS = {"redcar", "graycar", "whitecar"};
     private List<Car> cars = new ArrayList<>();
     private BlockingDeque<Car> colaInterseccion = new LinkedBlockingDeque<>(100);
-    private boolean bloquear = false;
     private boolean ambulanciaPass = false;
 
 
@@ -112,63 +96,14 @@ public class NormalStreet {
                 suramb.toFront();
             }
         });
-//        AnimationTimer animationTimer = new AnimationTimer() {
-//            @Override
-//            public void handle(long now) {
-//                update();
-//            }
-//        };
-//        animationTimer.start();
-        //cercania();
+
         timeline();
         llegada();
         tiempoDeCola();
         cercania2();
         mover();
     }
-//    private void cercania(){
-//        AnimationTimer animationTimer = new AnimationTimer() {
-//            @Override
-//            public void handle(long now) {
-//                for (int i = 0; i < cars.size(); i++) {
-//                    Car car1 = cars.get(i);
-//                    double newX = car1.getRectangle().getX() + 2.0;
-//                    double newY = car1.getRectangle().getY() + 1.0;
-//                    car1.getRectangle().setX(newX);
-//                    car1.getRectangle().setY(newY);
-//                    car1.getImageView().setLayoutX(newX);
-//                    car1.getImageView().setLayoutY(newY);
-//
-//                    for (int j = 0; j < cars.size(); j++) {
-//                        if (i == j) continue;
-//
-//                        Car car2 = cars.get(j);
-//
-//                        double centerX1 = car1.getRectangle().getX() + car1.getRectangle().getWidth() / 2;
-//                        double centerY1 = car1.getRectangle().getY() + car1.getRectangle().getHeight() / 2;
-//
-//                        double centerX2 = car2.getRectangle().getX() + car2.getRectangle().getWidth() / 2;
-//                        double centerY2 = car2.getRectangle().getY() + car2.getRectangle().getHeight() / 2;
-//
-//                        double distanceX = centerX2 - centerX1;
-//                        double distanceY = centerY2 - centerY1;
-//                        double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-//
-//                        if (distance < 10) {
-//                            newX = newX * 0.9;
-//                            newY = newY * 0.9;
-//                        }
-//                        car1.getRectangle().setX(car1.getRectangle().getX() + newX);
-//                        car1.getRectangle().setY(car1.getRectangle().getY() + newY);
-//                        car1.getImageView().setLayoutX(car1.getRectangle().getX());
-//                        car1.getImageView().setLayoutY(car1.getRectangle().getY());
-//                    }
-//                }
-//            }
-//        };
-//
-//        animationTimer.start();
-//    }
+
     private void temporal(){
         for (int i = 0; i < cars.size(); i++) {
             Car car1 = cars.get(i);
@@ -1236,7 +1171,7 @@ private void resetCarPositionOeste(Car car) {
             }
 
         }
-        bloquear = false;
+        //bloquear = false;
     }
     public String diramb(){
         for (Car c:cars){

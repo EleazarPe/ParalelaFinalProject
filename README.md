@@ -2,38 +2,51 @@
 
 ## Descripción del Proyecto
 
-Este proyecto simula una intersección de calles en una carretera utilizando JavaFX para la interfaz gráfica y técnicas de paralelismo y concurrencia para gestionar el flujo de vehículos. Los vehículos pueden venir de cuatro direcciones (norte, sur, este y oeste) y deben seguir las reglas de tráfico para cruzar la intersección. La simulación permite estudiar y analizar el comportamiento de los vehículos en situaciones de tráfico concurrido, utilizando estructuras de datos y algoritmos de control avanzados.
+Para este proyecto nos toco simular 2 intersecciones de carros usando JavaFX y herraminetas de paralelismo en Java.
+
+Para este avanze nos toco hacer el esenario 1. Esta es una interseccion sin semaforos donde el carro que llegue primero a la interseccion pasa primero. El catch es que pueden aparecer ambulancias en las 4 calles. A las ambulancias se les da preferencia, significa que todos los carros alante de la misma deben pasar para que esta pueda cruzar, sin importar el orden previo. Veamos como hicimos esta parte
 
 ## Algoritmos de Control
 
 ### BlockingQueue
 
-En este proyecto, utilizamos una BlockingQueue para gestionar el flujo de los vehículos en la intersección. Una BlockingQueue es una estructura de datos que permite manejar operaciones de espera en caso de que la cola esté vacía (para operaciones de extracción) o llena (para operaciones de inserción). Esto es especialmente útil en escenarios concurrentes donde múltiples threads (hilos) pueden estar accediendo y modificando la cola al mismo tiempo.
+Esta es la parte mas importante del proyecto ya que contiene nuestra lista de carros en orden de llegada. Cada carro tambien conoce la calle en la cual esta asi podemos saber cuales carros debemos mover para que una ambulancia pase. Lo especial del blocking queue es que lo podemos usar entre threads y no causar un data race donde insertamos carros y borramos carros al mismo tiempo
 
-En nuestro contexto, la BlockingQueue ayuda a asegurar que los vehículos crucen la intersección en el orden correcto, evitando colisiones y garantizando un flujo de tráfico eficiente.
+## Estructura del Proyecto
 
-## Configuración del Proyecto
+Primero es bueno explicar cada parte porque no utilizamos todas las clases en este momento. Empezando con el folder logica, solo utilizamos Car el cual contiene informacion de su ID, en cual calle esta, y si es un carro de emergencia.
 
-El proyecto está organizado de la siguiente manera:
+El normal street es nuestro escenario, aqui definimos las calles, botones y toda la logica del escenario. Esta utlima se utiliza en normalStreet.fxml. Viendo los resources, en el folder cars encotramos las imagenes de los 3 tipos de carros y la ambulancia. en direcciones encontramos los botones giroU y reutilizamos linea para el doble derecho, izquierdo y recto.
 
-- *Carpeta logico*: Contiene la clase Car, que define los atributos y comportamientos de los vehículos.
-  - *Clase Car*: Esta clase incluye propiedades como ImageView, Rectangle, id, tipoEmergencia, origen, y destino. También gestiona la lógica de movimiento y orientación de los vehículos en la intersección.
-  
-- *Main*: Aquí se encuentran los controladores principales que gestionan la interfaz gráfica y la lógica de la simulación.
-  - *Controladores*: Manejan la creación y movimiento de los vehículos, así como la interacción con la interfaz de usuario en JavaFX.
-  
-- *Carpeta Image*: Contiene las imágenes utilizadas en la simulación, como los íconos de los vehículos y otros elementos gráficos.
+![image](https://github.com/user-attachments/assets/607f375d-b004-4c98-afa0-8a331b621d86)
 
 ## Ejecución del Proyecto
 
 Para ejecutar el proyecto, sigue estos pasos:
 
-1. Clona el repositorio en tu máquina local.
-   sh
-   git clone <URL_DEL_REPOSITORIO>
-   
-2. Abre el proyecto en tu IDE de preferencia (recomendado: IntelliJ IDEA o Eclipse).
-3. Asegúrate de tener configurado JavaFX en tu entorno.
-4. Ejecuta la clase principal para iniciar la simulación.
-   sh
-   ./gradlew run
+Hay 2 maneras de ejecutar el programa.
+
+### Utilizando intellij
+
+- Entrar al proyecto
+- seleccionar el archivo MainAplication
+- correr el documento
+
+### Utilizando gradle
+
+- Correr el comando "gradle run" en el proyecto.
+
+#### Si todo funciono bien esta pantalla debe salir
+![image](https://github.com/user-attachments/assets/95f8f175-bdf5-4e20-8df6-94a282c9cf25)
+
+### Viendolo en accion.
+
+Seleccionar el primero iniciar, mostrara la siguiente patalla.
+
+Para agregar un carro normal seleccionar el boton "Agregar" en la parte arriba izquiera.
+Seleccionar Carro o Ambulancia.
+Seleccionar uno de los 4 circulos en cada calle.
+Repetir
+
+![image](https://github.com/user-attachments/assets/7baa41a1-a5b8-4d86-bd73-9cc347fb7c81)
+

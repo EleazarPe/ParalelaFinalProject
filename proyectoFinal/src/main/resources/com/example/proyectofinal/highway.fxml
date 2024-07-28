@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<Pane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectofinal.HighwayStreet">
+    <children>
+        <Pane fx:id="root" layoutY="26.0" prefHeight="900.0" prefWidth="1920.0" style="-fx-background-image: url('file:src/main/resources/com/example/proyectofinal/scene/highway.png'); -fx-background-size: 100% 100%; -fx-background-position: center center;">
+
+<!--            <Rectangle fx:id="oestePare" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="79.0" layoutX="536.0" layoutY="458.0" strokeType="INSIDE" width="16.0" />-->
+<!--            <Rectangle fx:id="estePare" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="79.0" layoutX="758.0" layoutY="379.0" strokeType="INSIDE" width="16.0" />-->
+<!--            <Rectangle fx:id="nortePare" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="79.0" layoutX="602.0" layoutY="303.0" rotate="90.0" strokeType="INSIDE" width="16.0" />-->
+<!--            <Rectangle fx:id="surPare" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="79.0" layoutX="694.0" layoutY="527.0" rotate="90.0" strokeType="INSIDE" width="16.0" />-->
+
+            <children>
+                <Circle fx:id="este" fill="DODGERBLUE" layoutX="1844.0" layoutY="326.0" onMouseClicked="#handleCircleClick" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+                <Circle fx:id="oeste" fill="DODGERBLUE" layoutX="56.0" layoutY="642.0" onMouseClicked="#handleCircleClick" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+
+                <Circle fx:id="esteamb" fill="#ff0017" layoutX="1844.0" layoutY="326.0" onMouseClicked="#handleCircleClickAmb" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+                <Circle fx:id="oesteamb" fill="#ff0017" layoutX="56.0" layoutY="642.0" onMouseClicked="#handleCircleClickAmb" radius="24.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+                <Pane fx:id="direccionPane" layoutX="434.0" layoutY="725.0" style="-fx-background-color: white;" visible="false">
+                    <HBox prefHeight="120.0" prefWidth="458.0" spacing="10">
+                        <StackPane fx:id="izquierdadir" onMouseClicked="#handleDirection" prefHeight="100.0" prefWidth="115.0">
+                            <Rectangle fx:id="izquierda" arcHeight="25" arcWidth="25" fill="#e1e1e1" height="100" width="115" />
+                            <ImageView fx:id="izquierdaimg" fitHeight="100" fitWidth="115" rotate="270">
+                                <image>
+                                    <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png" />
+                                </image>
+                            </ImageView>
+                        </StackPane>
+                        <StackPane fx:id="alantedir" onMouseClicked="#handleDirection" prefHeight="100.0" prefWidth="115.0">
+                            <Rectangle fx:id="alante" arcHeight="25" arcWidth="25" fill="#e1e1e1" height="100" width="115" />
+                            <ImageView fx:id="alanteimg" fitHeight="100" fitWidth="115" rotate="0">
+                                <image>
+                                    <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png" />
+                                </image>
+                            </ImageView>
+                        </StackPane>
+                        <StackPane fx:id="udir" onMouseClicked="#handleDirection" prefHeight="100.0" prefWidth="115.0">
+                            <Rectangle fx:id="enu" arcHeight="25" arcWidth="25" fill="#e1e1e1" height="100" width="115" />
+                            <ImageView fx:id="enuimg" fitHeight="100" fitWidth="115">
+                                <image>
+                                    <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/giroU.png" />
+                                </image>
+                            </ImageView>
+                        </StackPane>
+                        <StackPane fx:id="derechadir" layoutX="151.0" onMouseClicked="#handleDirection" prefHeight="100.0" prefWidth="115.0">
+                            <Rectangle fx:id="derecha" arcHeight="25" arcWidth="25" fill="#e1e1e1" height="100" width="115" />
+                            <ImageView fx:id="derechaimg" fitHeight="100" fitWidth="115" rotate="90">
+                                <image>
+                                    <Image url="file:src/main/resources/com/example/proyectofinal/direcciones/lineal.png" />
+                                </image>
+                            </ImageView>
+                        </StackPane>
+                    </HBox>
+                </Pane>
+            </children>
+             <Rectangle fx:id="carrilEste1" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245" layoutX="700.0" layoutY="205.0" strokeType="INSIDE" width="6.0" />
+            <Rectangle fx:id="carrilEste2" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245" layoutX="1200.0" layoutY="205.0" strokeType="INSIDE" width="6.0" />
+            <Rectangle fx:id="carrilEste3" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245" layoutX="1700.0" layoutY="205.0" strokeType="INSIDE" width="6.0" />
+
+            <Rectangle fx:id="carrilOeste1" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245.0" layoutX="200.0" layoutY="521.0" strokeType="INSIDE" width="6.0" />
+            <Rectangle fx:id="carrilOeste2" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245.0" layoutX="700.0" layoutY="521.0" strokeType="INSIDE" width="6.0" />
+            <Rectangle fx:id="carrilOeste3" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245.0" layoutX="1200.0" layoutY="521.0" strokeType="INSIDE" width="6.0" />
+
+            <Rectangle fx:id="cruce1" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="564.0" layoutX="904.0" layoutY="205.0" strokeType="INSIDE" width="111.0" />
+            <Rectangle fx:id="cruce2" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="564.0" layoutX="1384.0" layoutY="205.0" strokeType="INSIDE" width="114.0" />
+            <Rectangle fx:id="cruce3" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="564.0" layoutX="384.0" layoutY="205.0" strokeType="INSIDE" width="111.0" />
+         <VBox layoutX="417.0" layoutY="260.0" prefHeight="110.0" prefWidth="36.0" style="-fx-background-color: #272628; -fx-padding: 5px;">
+            <children>
+                <Circle fill="#a60017" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+                <Circle fill="#dcb600" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#35ab06" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+            </children>
+         </VBox>
+         <VBox layoutX="417.0" layoutY="580.0" prefHeight="110.0" prefWidth="36.0" style="-fx-background-color: #272628; -fx-padding: 5px;">
+            <children>
+               <Circle fill="#a60017" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#dcb600" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#35ab06" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+            </children>
+         </VBox>
+         <VBox layoutX="940.0" layoutY="260.0" prefHeight="110.0" prefWidth="36.0" style="-fx-background-color: #272628; -fx-padding: 5px;">
+            <children>
+               <Circle fill="#a60017" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#dcb600" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#35ab06" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+            </children>
+         </VBox>
+         <VBox layoutX="940.0" layoutY="580.0" prefHeight="110.0" prefWidth="36.0" style="-fx-background-color: #272628; -fx-padding: 5px;">
+            <children>
+               <Circle fill="#a60017" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#dcb600" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#35ab06" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+            </children>
+         </VBox>
+         <VBox layoutX="1420.0" layoutY="260.0" prefHeight="110.0" prefWidth="36.0" style="-fx-background-color: #272628; -fx-padding: 5px;">
+            <children>
+               <Circle fill="#a60017" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#dcb600" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#35ab06" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+            </children>
+         </VBox>
+         <VBox layoutX="1420.0" layoutY="580.0" prefHeight="110.0" prefWidth="36.0" style="-fx-background-color: #272628; -fx-padding: 5px;">
+            <children>
+               <Circle fill="#a60017" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#dcb600" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+               <Circle fill="#35ab06" radius="18.0" stroke="#272628" strokeType="INSIDE" />
+            </children>
+         </VBox>
+
+        </Pane>
+        <MenuBar prefHeight="25.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="Agregar">
+                    <items>
+                        <MenuItem fx:id="agregarCarrito" mnemonicParsing="false" text="Carro" />
+                        <MenuItem fx:id="agregarAmbulancia" mnemonicParsing="false" text="Ambulancia" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Opciones">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Reiniciar" />
+                        <MenuItem mnemonicParsing="false" text="Eliminar Carros" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </children>
+</Pane>

@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="889.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectofinal.NormalStreet">
    <children>
-      <Pane fx:id="root" layoutY="26.0" prefHeight="863.0" prefWidth="1280.0" style="-fx-background-image: url('file:src/main/resources/com/example/proyectofinal/background.png'); -fx-background-size: cover;">
+      <Pane fx:id="root" layoutY="26.0" prefHeight="863.0" prefWidth="1280.0" style="-fx-background-image: url('file:src/main/resources/com/example/proyectofinal/scene/background.png'); -fx-background-size: cover;">
          <Rectangle fx:id="oestePare" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="79.0" layoutX="536.0" layoutY="458.0" strokeType="INSIDE" width="16.0" />
          <Rectangle fx:id="estePare" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="79.0" layoutX="758.0" layoutY="379.0" strokeType="INSIDE" width="16.0" />
          <Rectangle fx:id="nortePare" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="79.0" layoutX="602.0" layoutY="303.0" rotate="90.0" strokeType="INSIDE" width="16.0" />

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="440.0" prefWidth="794.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectofinal.HelloController">
+<VBox alignment="CENTER" prefHeight="440.0" prefWidth="794.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectofinal.HomeController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -16,12 +16,12 @@
       <children>
          <Pane layoutX="88.0" layoutY="66.0" prefHeight="268.0" prefWidth="272.0" style="-fx-background-color: gray;">
             <children>
-               <Pane layoutX="16.0" layoutY="23.0" prefHeight="149.0" prefWidth="240.0" style="-fx-background-image: url('file:src/main/resources/com/example/proyectofinal/background.png');-fx-background-size: cover;">
+               <Pane layoutX="16.0" layoutY="23.0" prefHeight="149.0" prefWidth="240.0" style="-fx-background-image: url('file:src/main/resources/com/example/proyectofinal/scene/background.png');-fx-background-size: cover;">
                   <effect>
                      <Blend />
                   </effect>
                </Pane>
-                <Button cancelButton="true" defaultButton="true" layoutX="16.0" layoutY="180.0" onMouseClicked="#onHelloButtonClick" prefHeight="48.0" prefWidth="240.0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #3498db;" text="INICIAR!" textAlignment="JUSTIFY" wrapText="true">
+                <Button cancelButton="true" defaultButton="true" layoutX="16.0" layoutY="180.0" onMouseClicked="#nomralbtn" prefHeight="48.0" prefWidth="240.0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #3498db;" text="INICIAR!" textAlignment="JUSTIFY" wrapText="true">
                   <cursor>
                      <Cursor fx:constant="DISAPPEAR" />
                   </cursor>
@@ -30,12 +30,12 @@
          </Pane>
          <Pane layoutX="394.0" layoutY="66.0" prefHeight="268.0" prefWidth="272.0" style="-fx-background-color: gray;">
             <children>
-               <Pane layoutX="19.0" layoutY="23.0" prefHeight="149.0" prefWidth="240.0" style="-fx-background-image: url('file:src/main/resources/com/example/proyectofinal/background.png');-fx-background-size: cover;">
+               <Pane layoutX="19.0" layoutY="23.0" prefHeight="149.0" prefWidth="240.0" style="-fx-background-image: url('file:src/main/resources/com/example/proyectofinal/scene/highway.png');-fx-background-size: cover;">
                   <effect>
                      <Blend />
                   </effect>
                </Pane>
-               <Button cancelButton="true" defaultButton="true" layoutX="16.0" layoutY="180.0" prefHeight="48.0" prefWidth="240.0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #3498db;" text="INICIAR!" textAlignment="JUSTIFY" wrapText="true">
+               <Button onMouseClicked="#highbtn" cancelButton="true" defaultButton="true" layoutX="16.0" layoutY="180.0" prefHeight="48.0" prefWidth="240.0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #3498db;" text="INICIAR!" textAlignment="JUSTIFY" wrapText="true">
                   <cursor>
                      <Cursor fx:constant="DISAPPEAR" />
                   </cursor>

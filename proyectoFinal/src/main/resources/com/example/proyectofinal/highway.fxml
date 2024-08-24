@@ -64,17 +64,17 @@
                     </HBox>
                 </Pane>
             </children>
-             <Rectangle fx:id="carrilEste1" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245" layoutX="700.0" layoutY="205.0" strokeType="INSIDE" width="6.0" />
-            <Rectangle fx:id="carrilEste2" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245" layoutX="1200.0" layoutY="205.0" strokeType="INSIDE" width="6.0" />
-            <Rectangle fx:id="carrilEste3" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245" layoutX="1700.0" layoutY="205.0" strokeType="INSIDE" width="6.0" />
+             <Rectangle fx:id="carrilEste1" arcHeight="5.0" arcWidth="5.0" fill="red" height="245" layoutX="700.0" layoutY="205.0" strokeType="INSIDE" width="6.0" />
+            <Rectangle fx:id="carrilEste2" arcHeight="5.0" arcWidth="5.0" fill="red" height="245" layoutX="1200.0" layoutY="205.0" strokeType="INSIDE" width="6.0" />
+            <Rectangle fx:id="carrilEste3" arcHeight="5.0" arcWidth="5.0" fill="red" height="245" layoutX="1700.0" layoutY="205.0" strokeType="INSIDE" width="6.0" />
 
-            <Rectangle fx:id="carrilOeste1" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245.0" layoutX="200.0" layoutY="521.0" strokeType="INSIDE" width="6.0" />
-            <Rectangle fx:id="carrilOeste2" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245.0" layoutX="700.0" layoutY="521.0" strokeType="INSIDE" width="6.0" />
-            <Rectangle fx:id="carrilOeste3" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="245.0" layoutX="1200.0" layoutY="521.0" strokeType="INSIDE" width="6.0" />
+            <Rectangle fx:id="carrilOeste1" arcHeight="5.0" arcWidth="5.0" fill="red" height="245.0" layoutX="200.0" layoutY="521.0" strokeType="INSIDE" width="6.0" />
+            <Rectangle fx:id="carrilOeste2" arcHeight="5.0" arcWidth="5.0" fill="red" height="245.0" layoutX="700.0" layoutY="521.0" strokeType="INSIDE" width="6.0" />
+            <Rectangle fx:id="carrilOeste3" arcHeight="5.0" arcWidth="5.0" fill="red" height="245.0" layoutX="1200.0" layoutY="521.0" strokeType="INSIDE" width="6.0" />
 
-            <Rectangle fx:id="cruce1" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="564.0" layoutX="904.0" layoutY="205.0" strokeType="INSIDE" width="111.0" />
-            <Rectangle fx:id="cruce2" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="564.0" layoutX="1384.0" layoutY="205.0" strokeType="INSIDE" width="114.0" />
-            <Rectangle fx:id="cruce3" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="564.0" layoutX="384.0" layoutY="205.0" strokeType="INSIDE" width="111.0" />
+            <Rectangle fx:id="cruce1" arcHeight="5.0" arcWidth="5.0" fill="red" height="564.0" layoutX="904.0" layoutY="205.0" strokeType="INSIDE" width="111.0" />
+            <Rectangle fx:id="cruce2" arcHeight="5.0" arcWidth="5.0" fill="red" height="564.0" layoutX="1384.0" layoutY="205.0" strokeType="INSIDE" width="114.0" />
+            <Rectangle fx:id="cruce3" arcHeight="5.0" arcWidth="5.0" fill="red" height="564.0" layoutX="384.0" layoutY="205.0" strokeType="INSIDE" width="111.0" />
          <VBox layoutX="417.0" layoutY="260.0" prefHeight="110.0" prefWidth="36.0" style="-fx-background-color: #272628; -fx-padding: 5px;">
             <children>
                 <Circle fill="#a60017" radius="18.0" stroke="#272628" strokeType="INSIDE" />

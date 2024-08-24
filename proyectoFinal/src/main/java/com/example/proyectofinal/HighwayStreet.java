@@ -52,17 +52,17 @@ public class HighwayStreet {
     @FXML
     private Pane direccionPane;
     @FXML
-    private Rectangle carrilEste1;
+    private Rectangle carrilNorteTercero;
     @FXML
-    private Rectangle carrilEste2;
+    private Rectangle carrilNorteSegundo;
     @FXML
-    private Rectangle carrilEste3;
+    private Rectangle carrilNortePrimero;
     @FXML
-    private Rectangle carrilOeste1;
+    private Rectangle carrilSurPrimero;
     @FXML
-    private Rectangle carrilOeste2;
+    private Rectangle carrilSurSegundo;
     @FXML
-    private Rectangle carrilOeste3;
+    private Rectangle carrilSurTercero;
 
     private int idcars = 0;
     private String[] direcciones = new String[3];
@@ -342,20 +342,20 @@ public class HighwayStreet {
     public void cambioCarril(){
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
             for (CarH car : cars) {
-                if (car.getRectangle().getBoundsInParent().intersects(carrilEste1.getBoundsInParent()) && !car.getCarril()) {
+                if (car.getRectangle().getBoundsInParent().intersects(carrilNorteTercero.getBoundsInParent()) && !car.getCarril()) {
                     car.setCarril(true);
                     if(!car.getDestino()[2].equals("adelantedir")){
                        System.out.println("Cambio de carril1");
                         crusando(car,2);
                     }
-                }else if(car.getRectangle().getBoundsInParent().intersects(carrilEste2.getBoundsInParent()) && !car.getCarril()) {
+                }else if(car.getRectangle().getBoundsInParent().intersects(carrilNorteSegundo.getBoundsInParent()) && !car.getCarril()) {
                     car.setCarril(true);
                     if(!car.getDestino()[1].equals("adelantedir")){
                         System.out.println("Cambio de carril2");
                         crusando(car, 1);
                     }
 
-                }else if (car.getRectangle().getBoundsInParent().intersects(carrilEste3.getBoundsInParent()) && !car.getCarril() ) {
+                }else if (car.getRectangle().getBoundsInParent().intersects(carrilNortePrimero.getBoundsInParent()) && !car.getCarril() ) {
                     car.setCarril(true);
                     if(!car.getDestino()[0].equals("adelantedir")){
                         System.out.println("Cambio de carril3");
@@ -363,20 +363,20 @@ public class HighwayStreet {
                     }
 
                 }
-                if (car.getRectangle().getBoundsInParent().intersects(carrilOeste1.getBoundsInParent()) && !car.getCarril()) {
+                if (car.getRectangle().getBoundsInParent().intersects(carrilSurPrimero.getBoundsInParent()) && !car.getCarril()) {
                     car.setCarril(true);
                     if(!car.getDestino()[0].equals("adelantedir")){
                         System.out.println("Cambio de carril1");
                         crusando(car,0);
                     }
-                }else if(car.getRectangle().getBoundsInParent().intersects(carrilOeste2.getBoundsInParent()) && !car.getCarril()) {
+                }else if(car.getRectangle().getBoundsInParent().intersects(carrilSurSegundo.getBoundsInParent()) && !car.getCarril()) {
                     car.setCarril(true);
                     if(!car.getDestino()[1].equals("adelantedir")){
                         System.out.println("Cambio de carril2");
                         crusando(car, 1);
                     }
 
-                }else if (car.getRectangle().getBoundsInParent().intersects(carrilOeste3.getBoundsInParent()) && !car.getCarril() ) {
+                }else if (car.getRectangle().getBoundsInParent().intersects(carrilSurTercero.getBoundsInParent()) && !car.getCarril() ) {
                     car.setCarril(true);
                     if(!car.getDestino()[2].equals("adelantedir")){
                         System.out.println("Cambio de carril3");
@@ -384,11 +384,11 @@ public class HighwayStreet {
                     }
 
                 }
-                if(car.getOrigen().equals("este") && (!car.getRectangle().getBoundsInParent().intersects(carrilEste1.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilEste2.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilEste3.getBoundsInParent()))){
+                if(car.getOrigen().equals("este") && (!car.getRectangle().getBoundsInParent().intersects(carrilNorteTercero.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilNorteSegundo.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilNortePrimero.getBoundsInParent()))){
                     car.setCarril(false);
                 }
 
-                if(car.getOrigen().equals("oeste") && (!car.getRectangle().getBoundsInParent().intersects(carrilOeste1.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilOeste2.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilOeste3.getBoundsInParent()))){
+                if(car.getOrigen().equals("oeste") && (!car.getRectangle().getBoundsInParent().intersects(carrilSurPrimero.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilSurSegundo.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilSurTercero.getBoundsInParent()))){
                     car.setCarril(false);
                 }
 

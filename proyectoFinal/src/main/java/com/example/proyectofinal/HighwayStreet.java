@@ -5,6 +5,7 @@ import com.example.proyectofinal.logica.CarH;
 import com.example.proyectofinal.logica.OriginalCar;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,17 +17,31 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-
+import java.util.*;
 
 public class HighwayStreet {
+
+    private static final Color COLOR_ROJO = Color.web("0xa60017");
+    private static final Color COLOR_AMARILLO = Color.web("0xdcb600");
+    private static final Color COLOR_VERDE = Color.web("green");
+    private static final Color COLOR_OFF = Color.web("0x373638");
+
+    private static final int SEMAFORO_NORTE_DERECHA = 1;
+    private static final int SEMAFORO_SUR_DERECHA = 2;
+    private static final int SEMAFORO_NORTE_CENTRO = 3;
+    private static final int SEMAFORO_SUR_CENTRO = 4;
+    private static final int SEMAFORO_NORTE_IZQUIERDA = 5;
+    private static final int SEMAFORO_SUR_IZQUIERDA = 6;
+
+    private static final int SEMAFORO_TIMER_MILLI = 10000;
+    private static final int SEMAFORO_AMARILLO_TIMER_MILLI = 3000;
+
 
     @FXML
     private MenuItem agregarCarrito;
@@ -75,6 +90,48 @@ public class HighwayStreet {
     private Rectangle carrilSurSegundo;
     @FXML
     private Rectangle carrilSurTercero;
+    @FXML
+    private Circle semaforoLuzR1;
+    @FXML
+    private Circle semaforoLuzA1;
+    @FXML
+    private Circle semaforoLuzV1;
+    @FXML
+    private Circle semaforoLuzR2;
+    @FXML
+    private Circle semaforoLuzA2;
+    @FXML
+    private Circle semaforoLuzV2;
+    @FXML
+    private Circle semaforoLuzR3;
+    @FXML
+    private Circle semaforoLuzA3;
+    @FXML
+    private Circle semaforoLuzV3;
+    @FXML
+    private Circle semaforoLuzR4;
+    @FXML
+    private Circle semaforoLuzA4;
+    @FXML
+    private Circle semaforoLuzV4;
+    @FXML
+    private Circle semaforoLuzR5;
+    @FXML
+    private Circle semaforoLuzA5;
+    @FXML
+    private Circle semaforoLuzV5;
+    @FXML
+    private Circle semaforoLuzR6;
+    @FXML
+    private Circle semaforoLuzA6;
+    @FXML
+    private Circle semaforoLuzV6;
+    List<Circle> semaforoLuzR = new ArrayList<>();
+    List<Circle> semaforoLuzA = new ArrayList<>();
+    List<Circle> semaforoLuzV = new ArrayList<>();
+
+
+
 
     private int idcars = 0;
     private String[] direcciones = new String[3];
@@ -85,6 +142,15 @@ public class HighwayStreet {
     private List<OriginalCar> carstemp = new ArrayList<>();
     @FXML
     public void initialize() {
+
+        semaforoLuzR = Arrays.asList(semaforoLuzR1, semaforoLuzR2, semaforoLuzR3, semaforoLuzR4, semaforoLuzR5, semaforoLuzR6);
+        semaforoLuzA = Arrays.asList(semaforoLuzA1, semaforoLuzA2, semaforoLuzA3, semaforoLuzA4, semaforoLuzA5, semaforoLuzA6);
+        semaforoLuzV = Arrays.asList(semaforoLuzV1, semaforoLuzV2, semaforoLuzV3, semaforoLuzV4, semaforoLuzV5, semaforoLuzV6);
+
+        setInitialSemaforoColor();
+
+        startSemaforos();
+
         agregarCarrito.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -298,6 +364,7 @@ public class HighwayStreet {
         return true;
     }
     private void addCar(String id, boolean ambulancia) {
+
         String carImage = CARS[new Random().nextInt(CARS.length)];
         Image image = new Image("file:src/main/resources/com/example/proyectofinal/cars/" + carImage + ".png");
         ImageView carritoImagen = new ImageView(image);
@@ -818,5 +885,93 @@ public class HighwayStreet {
 
     }
 
+    private void startSemaforos(){
 
+        setInitialSemaforoColor();
+
+        Timeline startSemaforo = new Timeline(new KeyFrame(Duration.millis(SEMAFORO_TIMER_MILLI), event -> {
+            changeSemaforoColor(SEMAFORO_NORTE_DERECHA);
+            changeSemaforoColor(SEMAFORO_SUR_DERECHA);
+            changeSemaforoColor(SEMAFORO_NORTE_CENTRO);
+            changeSemaforoColor(SEMAFORO_SUR_CENTRO);
+            changeSemaforoColor(SEMAFORO_NORTE_IZQUIERDA);
+            changeSemaforoColor(SEMAFORO_SUR_IZQUIERDA);
+        }));
+        startSemaforo.setCycleCount(Timeline.INDEFINITE);
+        startSemaforo.play();
+
+    }
+
+    private void changeSemaforoColor(int id){
+
+        Circle luzR = semaforoLuzR.get(id - 1); // Subtract 1 because list indices start at 0
+        Circle luzA = semaforoLuzA.get(id - 1);
+        Circle luzV = semaforoLuzV.get(id - 1);
+
+        Color currentColor = (Color) luzV.getFill();
+
+        Timeline semaforo = new Timeline(new KeyFrame(Duration.millis(1), event -> {
+
+            if (currentColor.equals(COLOR_VERDE)) {
+                luzR.setFill(COLOR_OFF);
+                luzA.setFill(COLOR_AMARILLO);
+                luzV.setFill(COLOR_OFF);
+
+                PauseTransition pause = new PauseTransition(Duration.millis(SEMAFORO_AMARILLO_TIMER_MILLI));
+                pause.setOnFinished(e -> {
+                    luzR.setFill(COLOR_ROJO);
+                    luzA.setFill(COLOR_OFF);
+                    luzV.setFill(COLOR_OFF);
+                });
+                pause.setCycleCount(0);
+                pause.play();
+            }else{
+                PauseTransition pause = new PauseTransition(Duration.millis(SEMAFORO_AMARILLO_TIMER_MILLI));
+                pause.setOnFinished(e -> {
+                    luzR.setFill(COLOR_OFF);
+                    luzA.setFill(COLOR_OFF);
+                    luzV.setFill(COLOR_VERDE);
+                });
+                pause.setCycleCount(0);
+                pause.play();
+            }
+        }));
+        semaforo.setCycleCount(0);
+        semaforo.play();
+    }
+
+    private void setInitialSemaforoColor(){
+
+        // NORTE
+        semaforoLuzR1.setFill(COLOR_ROJO);
+        semaforoLuzA1.setFill(COLOR_OFF);
+        semaforoLuzV1.setFill(COLOR_OFF);
+
+        semaforoLuzR3.setFill(COLOR_ROJO);
+        semaforoLuzA3.setFill(COLOR_OFF);
+        semaforoLuzV3.setFill(COLOR_OFF);
+
+        semaforoLuzR5.setFill(COLOR_ROJO);
+        semaforoLuzA5.setFill(COLOR_OFF);
+        semaforoLuzV5.setFill(COLOR_OFF);
+
+        //SUR
+        semaforoLuzR2.setFill(COLOR_OFF);
+        semaforoLuzA2.setFill(COLOR_OFF);
+        semaforoLuzV2.setFill(COLOR_VERDE);
+
+        semaforoLuzR4.setFill(COLOR_OFF);
+        semaforoLuzA4.setFill(COLOR_OFF);
+        semaforoLuzV4.setFill(COLOR_VERDE);
+
+        semaforoLuzR6.setFill(COLOR_OFF);
+        semaforoLuzA6.setFill(COLOR_OFF);
+        semaforoLuzV6.setFill(COLOR_VERDE);
+    }
+
+    private boolean checkCarPassSemaforo(int semaforo){
+        Circle luzV = semaforoLuzV.get(semaforo - 1);
+        Color currentColor = (Color) luzV.getFill();
+        return currentColor.equals(COLOR_VERDE);
+    }
 }

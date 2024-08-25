@@ -269,6 +269,7 @@ public class HighwayStreet {
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
     }
+
     private void temporal() {
         for (int i = 0; i < cars.size(); i++) {
             CarH car1 = cars.get(i);
@@ -281,32 +282,44 @@ public class HighwayStreet {
                         Math.pow(car1.getRectangle().getY() - car2.getRectangle().getY(), 2));
 
                 if (distanciaEuclidiana < 110) {
-                    if ((car1.getRectangle().getRotate() == 180 && car2.getRectangle().getRotate() == 180)) {
-                        if ((car1.getRectangle().getY() > car2.getRectangle().getY() || car1.getRectangle().getY() == car2.getRectangle().getY()) && car1.getRectangle().getY() - car2.getRectangle().getY() < 110) {
+                    // Movimiento de norte a sur (rotación 180)
+                    if (car1.getRectangle().getRotate() == 180 && car2.getRectangle().getRotate() == 180) {
+                        if (car1.getRectangle().getX() == car2.getRectangle().getX() && // Verifica que estén en el mismo carril
+                                car1.getRectangle().getY() > car2.getRectangle().getY() &&
+                                car1.getRectangle().getY() - car2.getRectangle().getY() < 110) {
                             if (car2.getAnimationTimer() != null) {
                                 car2.getAnimationTimer().stop();
                                 car2.setRunning(false);
                             }
                         }
-
-                    } else if ((car1.getRectangle().getRotate() == 0 && car2.getRectangle().getRotate() == 0)) {
-                        if ((car1.getRectangle().getY() < car2.getRectangle().getY() || car1.getRectangle().getY() == car2.getRectangle().getY()) && car2.getRectangle().getY() - car1.getRectangle().getY() < 110) {
+                    }
+                    // Movimiento de sur a norte (rotación 0)
+                    else if (car1.getRectangle().getRotate() == 0 && car2.getRectangle().getRotate() == 0) {
+                        if (car1.getRectangle().getX() == car2.getRectangle().getX() && // Verifica que estén en el mismo carril
+                                car1.getRectangle().getY() < car2.getRectangle().getY() &&
+                                car2.getRectangle().getY() - car1.getRectangle().getY() < 110) {
                             if (car2.getAnimationTimer() != null) {
                                 car2.getAnimationTimer().stop();
                                 car2.setRunning(false);
                             }
                         }
-
-                    } else if ((car1.getRectangle().getRotate() == 90 && car2.getRectangle().getRotate() == 90)) {
-                        if ((car1.getRectangle().getX() > car2.getRectangle().getX() || car1.getRectangle().getX() == car2.getRectangle().getX()) && car1.getRectangle().getX() - car2.getRectangle().getX() < 110) {
+                    }
+                    // Movimiento de este a oeste (rotación 90)
+                    else if (car1.getRectangle().getRotate() == 90 && car2.getRectangle().getRotate() == 90) {
+                        if (car1.getRectangle().getY() == car2.getRectangle().getY() && // Verifica que estén en el mismo carril
+                                car1.getRectangle().getX() > car2.getRectangle().getX() &&
+                                car1.getRectangle().getX() - car2.getRectangle().getX() < 110) {
                             if (car2.getAnimationTimer() != null) {
                                 car2.getAnimationTimer().stop();
                                 car2.setRunning(false);
                             }
-
                         }
-                    } else if ((car1.getRectangle().getRotate() == 270 && car2.getRectangle().getRotate() == 270)) {
-                        if ((car1.getRectangle().getX() < car2.getRectangle().getX() || car1.getRectangle().getX() == car2.getRectangle().getX()) && car2.getRectangle().getX() - car1.getRectangle().getX() < 110) {
+                    }
+                    // Movimiento de oeste a este (rotación 270)
+                    else if (car1.getRectangle().getRotate() == 270 && car2.getRectangle().getRotate() == 270) {
+                        if (car1.getRectangle().getY() == car2.getRectangle().getY() && // Verifica que estén en el mismo carril
+                                car1.getRectangle().getX() < car2.getRectangle().getX() &&
+                                car2.getRectangle().getX() - car1.getRectangle().getX() < 110) {
                             if (car2.getAnimationTimer() != null) {
                                 car2.getAnimationTimer().stop();
                                 car2.setRunning(false);

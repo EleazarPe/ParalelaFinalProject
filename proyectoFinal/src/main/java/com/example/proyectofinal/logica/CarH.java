@@ -4,6 +4,10 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class CarH {
     private int id;
     private ImageView imageView;
@@ -16,6 +20,7 @@ public class CarH {
     private boolean pare;
     private boolean running;
     private boolean carril = false;
+    private List<Boolean> semaforos;
 
     public CarH(ImageView imageView, Rectangle rectangle, int id, boolean tipoEmergencia, String origen) {
         this.id = id;
@@ -26,6 +31,7 @@ public class CarH {
         this.inCrossing = false;
         this.pare = false;
         this.running = false;
+        this.semaforos = Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
     }
 
     public int getId() {
@@ -110,5 +116,22 @@ public class CarH {
 
     public void setCarril(boolean carril) {
         this.carril = carril;
+    }
+
+    public List<Boolean> getSemaforos() {
+        return semaforos;
+    }
+
+    public Boolean getSemaforos(int id) {
+        return semaforos.get(id - 1);
+    }
+
+    public void setSemaforos(int id) {
+        semaforos.set(id - 1, Boolean.TRUE);
+    }
+
+    public CarH setSemaforos(List<Boolean> semaforos) {
+        this.semaforos = semaforos;
+        return this;
     }
 }

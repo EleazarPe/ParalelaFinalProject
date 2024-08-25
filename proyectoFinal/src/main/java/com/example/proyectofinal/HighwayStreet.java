@@ -32,12 +32,12 @@ public class HighwayStreet {
     private static final Color COLOR_VERDE = Color.web("green");
     private static final Color COLOR_OFF = Color.web("0x373638");
 
-    private static final int SEMAFORO_NORTE_DERECHA = 1;
-    private static final int SEMAFORO_SUR_DERECHA = 2;
+    private static final int SEMAFORO_NORTE_DERECHA = 5;
+    private static final int SEMAFORO_SUR_DERECHA = 6;
     private static final int SEMAFORO_NORTE_CENTRO = 3;
     private static final int SEMAFORO_SUR_CENTRO = 4;
-    private static final int SEMAFORO_NORTE_IZQUIERDA = 5;
-    private static final int SEMAFORO_SUR_IZQUIERDA = 6;
+    private static final int SEMAFORO_NORTE_IZQUIERDA = 1;
+    private static final int SEMAFORO_SUR_IZQUIERDA = 2;
 
     private static final int SEMAFORO_TIMER_MILLI = 10000;
     private static final int SEMAFORO_AMARILLO_TIMER_MILLI = 3000;
@@ -129,6 +129,7 @@ public class HighwayStreet {
     List<Circle> semaforoLuzR = new ArrayList<>();
     List<Circle> semaforoLuzA = new ArrayList<>();
     List<Circle> semaforoLuzV = new ArrayList<>();
+    List<List<Integer>> carrilSemaforo = Arrays.asList(new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>());
 
 
 
@@ -186,6 +187,7 @@ public class HighwayStreet {
                     for (OriginalCar cc: carstemp) {
                         if(cc.getId() == c.getId()){
                             System.out.println("Salio de pantalla");
+                            c.setSemaforos(Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
                             if(c.getOrigen().equals("este")) {
                                 c.getRectangle().setX(root.getWidth()+100);
                                 c.getRectangle().setY(este.getCenterY() + 275);
@@ -980,62 +982,102 @@ public class HighwayStreet {
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
             for (CarH c: cars) {
                 if(c.getRectangle().getBoundsInParent().intersects(nortePare1.getBoundsInParent())){
-                    if(!checkCarPassSemaforo(SEMAFORO_NORTE_DERECHA)){
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
-                    }else{
+
+                    // Si esta cruzando
+                    if (c.getSemaforos(SEMAFORO_NORTE_DERECHA)){
                         c.setPare(false);
                         c.getAnimationTimer().start();
+                    }
+                    // Si puede pasar
+                    else if (checkCarPassSemaforo(SEMAFORO_NORTE_DERECHA)){
+                        c.setSemaforos(SEMAFORO_NORTE_DERECHA);
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                    // Si no puede cruzar
+                    else{
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(nortePare2.getBoundsInParent())){
-                    if(!checkCarPassSemaforo(SEMAFORO_NORTE_CENTRO)){
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
-                    }else{
+                    if (c.getSemaforos(SEMAFORO_NORTE_CENTRO)){
                         c.setPare(false);
                         c.getAnimationTimer().start();
+                    }
+                    else if (checkCarPassSemaforo(SEMAFORO_NORTE_CENTRO)){
+                        c.setSemaforos(SEMAFORO_NORTE_CENTRO);
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                    else{
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(nortePare3.getBoundsInParent())){
-                    if(!checkCarPassSemaforo(SEMAFORO_NORTE_IZQUIERDA)){
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
-                    }else{
+                    if (c.getSemaforos(SEMAFORO_NORTE_IZQUIERDA)){
                         c.setPare(false);
                         c.getAnimationTimer().start();
+                    }
+                    else if (checkCarPassSemaforo(SEMAFORO_NORTE_IZQUIERDA)){
+                        c.setSemaforos(SEMAFORO_NORTE_IZQUIERDA);
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                    else{
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare1.getBoundsInParent())){
-                    if(!checkCarPassSemaforo(SEMAFORO_SUR_IZQUIERDA)){
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
-                    }else{
+                    if (c.getSemaforos(SEMAFORO_SUR_IZQUIERDA)){
                         c.setPare(false);
                         c.getAnimationTimer().start();
+                    }
+                    else if (checkCarPassSemaforo(SEMAFORO_SUR_IZQUIERDA)){
+                        c.setSemaforos(SEMAFORO_SUR_IZQUIERDA);
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                    else{
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare2.getBoundsInParent())){
-                    if(!checkCarPassSemaforo(SEMAFORO_SUR_CENTRO)){
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
-                    }else{
+                    if (c.getSemaforos(SEMAFORO_SUR_CENTRO)){
                         c.setPare(false);
                         c.getAnimationTimer().start();
+                    }
+                    else if (checkCarPassSemaforo(SEMAFORO_SUR_CENTRO)){
+                        c.setSemaforos(SEMAFORO_SUR_CENTRO);
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                    else{
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare3.getBoundsInParent())){
-                    if(!checkCarPassSemaforo(SEMAFORO_SUR_DERECHA)){
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
-                    }else{
+                    if (c.getSemaforos(SEMAFORO_SUR_DERECHA)){
                         c.setPare(false);
                         c.getAnimationTimer().start();
+                    }
+                    else if (checkCarPassSemaforo(SEMAFORO_SUR_DERECHA)){
+                        c.setSemaforos(SEMAFORO_SUR_DERECHA);
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                    else{
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
                     }
                 }
             }
@@ -1044,6 +1086,66 @@ public class HighwayStreet {
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
     }
+
+    /*private boolean attemptCarrilSemaforo(int idSemaforo, int idCar){
+        if (checkCarPassCarrilSemaforo(idSemaforo)){
+
+            if (checkCarFromCarrilSemaforo(idSemaforo, idCar)){
+                return true;
+            }
+
+            addCarFromCarrilSemaforo(idSemaforo, idCar);
+
+            removeCarFromCarrilSemaforo(idSemaforo, idCar);
+
+        }
+        return false;
+    }
+
+    private synchronized void removeCarFromCarrilSemaforo(int idSemaforo, int idCar){
+
+        switch (idSemaforo){
+            case SEMAFORO_SUR_DERECHA:
+                idSemaforo = SEMAFORO_SUR_CENTRO;
+                break;
+            case SEMAFORO_SUR_CENTRO:
+                idSemaforo = SEMAFORO_SUR_IZQUIERDA;
+                break;
+            case SEMAFORO_SUR_IZQUIERDA:
+                idSemaforo = SEMAFORO_NORTE_DERECHA;
+                break;
+            case SEMAFORO_NORTE_IZQUIERDA:
+                idSemaforo = SEMAFORO_NORTE_CENTRO;
+                break;
+            case SEMAFORO_NORTE_CENTRO:
+                idSemaforo = SEMAFORO_NORTE_DERECHA;
+                break;
+            case SEMAFORO_NORTE_DERECHA:
+                idSemaforo = SEMAFORO_NORTE_IZQUIERDA;
+                break;
+
+        }
+
+        List<Integer> semaforo = carrilSemaforo.get(idSemaforo - 1);
+        Integer carro = semaforo.stream().filter(integer -> integer.equals(idCar)).findFirst().orElse(null);
+        if (carro != null){
+            semaforo.remove(carro);
+        }
+    }
+
+    private synchronized boolean addCarFromCarrilSemaforo(int idSemaforo, int idCar){
+        List<Integer> semaforo = carrilSemaforo.get(idSemaforo - 1);
+        return semaforo.add(idCar);
+    }
+
+    private boolean checkCarFromCarrilSemaforo(int idSemaforo, int idCar){
+        List<Integer> semaforo = carrilSemaforo.get(idSemaforo - 1);
+        return semaforo.contains(idCar);
+    }
+
+    private boolean checkCarPassCarrilSemaforo(int id){
+        return  carrilSemaforo.get(id - 1).size() < 3;
+    }*/
 
 
 

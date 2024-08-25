@@ -96,9 +96,9 @@
             <Rectangle fx:id="carrilSurTercero" arcHeight="5.0" arcWidth="5.0" fill="red" height="245.0"
                        layoutX="1200.0" layoutY="521.0" strokeType="INSIDE" width="6.0"/>
 
-            <Rectangle fx:id="nortePare1" arcHeight="5.0" arcWidth="5.0" fill="cyan" height="245" layoutX="500.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
+            <Rectangle fx:id="nortePare3" arcHeight="5.0" arcWidth="5.0" fill="cyan" height="245" layoutX="500.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
             <Rectangle fx:id="nortePare2" arcHeight="5.0" arcWidth="5.0" fill="cyan" height="245" layoutX="1020.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
-            <Rectangle fx:id="nortePare3" arcHeight="5.0" arcWidth="5.0" fill="cyan" height="245" layoutX="1500.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
+            <Rectangle fx:id="nortePare1" arcHeight="5.0" arcWidth="5.0" fill="cyan" height="245" layoutX="1500.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
 
             <Rectangle fx:id="surPare1" arcHeight="5.0" arcWidth="5.0" fill="cyan" height="245.0" layoutX="365.0" layoutY="521.0" strokeType="INSIDE" width="15.0" />
             <Rectangle fx:id="surPare2" arcHeight="5.0" arcWidth="5.0" fill="cyan" height="245.0" layoutX="885.0" layoutY="521.0" strokeType="INSIDE" width="15.0" />

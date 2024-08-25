@@ -175,18 +175,19 @@ public class HighwayStreet {
         cambioCarril();
         llegaAlcruceRojo();
         resetAllCars();
+        pararSemaforo();
 //        cruceStop();
     }
 
     private void resetAllCars() {
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
             for (CarH c: cars) {
-                if(c.getRectangle().getX() < -100 || c.getRectangle().getX() > root.getWidth() || c.getRectangle().getY() < -100 || c.getRectangle().getY() > root.getHeight()){
+                if(c.getRectangle().getX() < -100 || c.getRectangle().getX() > root.getWidth()+100 || c.getRectangle().getY() < -100 || c.getRectangle().getY() > root.getHeight()+100){
                     for (OriginalCar cc: carstemp) {
                         if(cc.getId() == c.getId()){
                             System.out.println("Salio de pantalla");
                             if(c.getOrigen().equals("este")) {
-                                c.getRectangle().setX(root.getWidth()-100);
+                                c.getRectangle().setX(root.getWidth()+100);
                                 c.getRectangle().setY(este.getCenterY() + 275);
                                 c.getImageView().setLayoutX(c.getRectangle().getX());
                                 c.getImageView().setLayoutY(c.getRectangle().getY());
@@ -194,7 +195,7 @@ public class HighwayStreet {
                                 c.getImageView().setRotate(270);
                             }
                             if(c.getOrigen().equals("oeste")) {
-                                c.getRectangle().setX(50);
+                                c.getRectangle().setX(-100);
                                 c.getRectangle().setY(oeste.getCenterY()+595);
                                 c.getImageView().setLayoutX(c.getRectangle().getX());
                                 c.getImageView().setLayoutY(c.getRectangle().getY());
@@ -974,4 +975,27 @@ public class HighwayStreet {
         Color currentColor = (Color) luzV.getFill();
         return currentColor.equals(COLOR_VERDE);
     }
+
+    private void pararSemaforo() {
+        Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
+            for (CarH c: cars) {
+                if(c.getRectangle().getBoundsInParent().intersects(nortePare1.getBoundsInParent())){
+                    if(!checkCarPassSemaforo(SEMAFORO_NORTE_DERECHA)){
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
+                    }else{
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                }
+            }
+
+        }));
+        collisionChecker.setCycleCount(Timeline.INDEFINITE);
+        collisionChecker.play();
+    }
+
+
+
+
 }

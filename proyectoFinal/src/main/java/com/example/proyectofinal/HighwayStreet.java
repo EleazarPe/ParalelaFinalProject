@@ -988,6 +988,56 @@ public class HighwayStreet {
                         c.getAnimationTimer().start();
                     }
                 }
+
+                if(c.getRectangle().getBoundsInParent().intersects(nortePare2.getBoundsInParent())){
+                    if(!checkCarPassSemaforo(SEMAFORO_NORTE_CENTRO)){
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
+                    }else{
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                }
+
+                if(c.getRectangle().getBoundsInParent().intersects(nortePare3.getBoundsInParent())){
+                    if(!checkCarPassSemaforo(SEMAFORO_NORTE_IZQUIERDA)){
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
+                    }else{
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                }
+
+                if(c.getRectangle().getBoundsInParent().intersects(surPare1.getBoundsInParent())){
+                    if(!checkCarPassSemaforo(SEMAFORO_SUR_IZQUIERDA)){
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
+                    }else{
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                }
+
+                if(c.getRectangle().getBoundsInParent().intersects(surPare2.getBoundsInParent())){
+                    if(!checkCarPassSemaforo(SEMAFORO_SUR_CENTRO)){
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
+                    }else{
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                }
+
+                if(c.getRectangle().getBoundsInParent().intersects(surPare3.getBoundsInParent())){
+                    if(!checkCarPassSemaforo(SEMAFORO_SUR_DERECHA)){
+                        c.setPare(true);
+                        c.getAnimationTimer().stop();
+                    }else{
+                        c.setPare(false);
+                        c.getAnimationTimer().start();
+                    }
+                }
             }
 
         }));

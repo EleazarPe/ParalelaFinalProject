@@ -126,12 +126,13 @@ public class HighwayStreet {
     private Circle semaforoLuzA6;
     @FXML
     private Circle semaforoLuzV6;
-    List<Circle> semaforoLuzR = new ArrayList<>();
-    List<Circle> semaforoLuzA = new ArrayList<>();
-    List<Circle> semaforoLuzV = new ArrayList<>();
-    List<List<Integer>> carrilSemaforo = Arrays.asList(new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>());
+    private List<Circle> semaforoLuzR = new ArrayList<>();
+    private List<Circle> semaforoLuzA = new ArrayList<>();
+    private List<Circle> semaforoLuzV = new ArrayList<>();
+    private List<List<Integer>> carrilSemaforo = Arrays.asList(new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>());
 
-    List<Integer> ambulancias = new ArrayList<>();
+    private List<Integer> ambulancias = new ArrayList<>();
+    private List<Boolean> semaforoWorking = Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
 
     private int idcars = 0;
     private String[] direcciones = new String[3];
@@ -1003,7 +1004,7 @@ public class HighwayStreet {
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_NORTE_DERECHA);
                     }else{
-
+                        attemptMoveAmbulance(c, SEMAFORO_NORTE_DERECHA);
                     }
                 }
 
@@ -1131,19 +1132,20 @@ public class HighwayStreet {
 
         CarH ambulancia = cars.stream().filter(car -> car.getId() == ambulancias.getFirst()).findFirst().get();
 
+        //TODO: if semaforo esta funcionando normal y el carro no es una ambulancia, utilizar movimiento normal.
+        if (isSemaforoWorking(semaforo) && !c.isTipoEmergencia()){
+            attemptMoveAmbulance(c, semaforo);
+        }
         // 1. Si un carro esta cruzando hay que dejarlo terminar
-        if (c.getSemaforos(semaforo - 1)){
+        else if (c.getSemaforos(semaforo - 1)){
             carroMove(c);
         }
         // 2. Si la ambulancia esta en el otro carril, bloquear ese carril
-        else if (ambulancia.isAvenidaNorte() != c.isAvenidaNorte() && !c.getSemaforos(semaforo - 1)){
+        else if (ambulancia.isAvenidaNorte() != c.isAvenidaNorte()){
             carroStop(c);
         }
-        // No dejar a nadie cruzar a la izquierda excepto la ambulancia
-        else if(false){
-
-        }
-        // 3. Revisar si hay algun carro in crossing que no sea la ambulancia, si es asi, esperar a que no alla ninguno y no cruzar si uno no es la ambulancia.
+        // 3. Revisar si hay algun carro del carril contrario in crossing que no sea la ambulancia, dejarlo pasar antes de la ambulancia
+        //TODO: if a car is crossing, stop (despues podemos ser mas especificos con el semaforo).
         else if (false){
 
         }
@@ -1152,19 +1154,23 @@ public class HighwayStreet {
             c.setSemaforos(semaforo - 1);
             carroMove(c);
         }
-/*        if (c.getSemaforos(SEMAFORO_SUR_IZQUIERDA)){
-
-        }
-        else if (checkCarPassSemaforo(SEMAFORO_SUR_IZQUIERDA)){
-            c.setSemaforos(SEMAFORO_SUR_IZQUIERDA);
-            carroMove(c);
-        }
-        else{
-            carroStop(c);
-        }*/
     }
 
+    private boolean isSemaforoWorking(int semaforo){
+        return false;
+        //return semaforoWorking.get(semaforo - 1);
+    }
 
+    private void turnOffSemaforo(int semaforo){
+        semaforoWorking.set(semaforo - 1, Boolean.FALSE);
+    }
 
+    private void turnOnSemaforo(int semaforo){
+        semaforoWorking.set(semaforo - 1, Boolean.TRUE);
+    }
+
+    private void turnOnAllSemaforos(){
+        semaforoWorking = Arrays.asList(Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE);
+    }
 
 }

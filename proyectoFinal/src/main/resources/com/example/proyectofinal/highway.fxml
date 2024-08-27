@@ -110,9 +110,9 @@
                        layoutY="205.0" strokeType="INSIDE" width="114.0"/>
             <Rectangle fx:id="cruceIzquiera" arcHeight="5.0" arcWidth="5.0" fill="red" height="564.0" layoutX="384.0"
                        layoutY="205.0" strokeType="INSIDE" width="111.0"/>
-            <Rectangle fx:id="nortAmbDerecha" arcHeight="5.0" arcWidth="5.0" fill="green" height="245" layoutX="470.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
+            <Rectangle fx:id="norteAmbIzquierda" arcHeight="5.0" arcWidth="5.0" fill="green" height="245" layoutX="470.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
             <Rectangle fx:id="norteAmbCentro" arcHeight="5.0" arcWidth="5.0" fill="green" height="245" layoutX="990.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
-            <Rectangle fx:id="norteAmbIzquierda" arcHeight="5.0" arcWidth="5.0" fill="green" height="245" layoutX="1470.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
+            <Rectangle fx:id="nortAmbDerecha" arcHeight="5.0" arcWidth="5.0" fill="green" height="245" layoutX="1470.0" layoutY="205.0" strokeType="INSIDE" width="15.0" />
 
             <Rectangle fx:id="surAmbIzquierda" arcHeight="5.0" arcWidth="5.0" fill="green" height="245.0" layoutX="395.0" layoutY="521.0" strokeType="INSIDE" width="15.0" />
             <Rectangle fx:id="surAmbCentro" arcHeight="5.0" arcWidth="5.0" fill="green" height="245.0" layoutX="915.0" layoutY="521.0" strokeType="INSIDE" width="15.0" />

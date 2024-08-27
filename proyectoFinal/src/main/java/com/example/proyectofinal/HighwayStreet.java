@@ -244,6 +244,8 @@ public class HighwayStreet {
         Circle circle = (Circle) event.getSource();
         String circleId = circle.getId();
         System.out.println("Circle pressed: " + circleId);
+        direcciones = new String[3];
+        settingDir = 0;
         if(circle.getId().equals("esteamb")) {
           addCar(circle.getId(), true);
           direccion();
@@ -400,7 +402,6 @@ public class HighwayStreet {
         carritoImagen.setFitWidth(50);
         Rectangle carrito = new Rectangle(50, 100);
         carrito.setFill(javafx.scene.paint.Color.TRANSPARENT);
-        CarH car = new CarH(carritoImagen, carrito, idcars, ambulancia,id);
         switch (id) {
             case "este" -> {
                 carrito.setX(root.getWidth()-100);
@@ -409,7 +410,6 @@ public class HighwayStreet {
                 carritoImagen.setLayoutY(carrito.getY());
                 carrito.setRotate(270);
                 carritoImagen.setRotate(270);
-                car.setAvenidaNorte(true);
             }
             case "oeste" -> {
                 carrito.setX(50);
@@ -418,10 +418,17 @@ public class HighwayStreet {
                 carritoImagen.setLayoutY(carrito.getY());
                 carrito.setRotate(90);
                 carritoImagen.setRotate(90);
+            }
+        }
+        CarH car = new CarH(carritoImagen, carrito, idcars,ambulancia,id);
+        switch (id) {
+            case "este" -> {
+                car.setAvenidaNorte(true);
+            }
+            case "oeste" -> {
                 car.setAvenidaNorte(false);
             }
         }
-
         OriginalCar oc = new OriginalCar(idcars);
         idcars++;
         cars.add(car);

@@ -19,7 +19,8 @@ public class CarH {
     private boolean inCrossing;
     private boolean pare;
     private boolean running;
-    private boolean carril = false;
+    private boolean carril;
+    private boolean avenidaNorte;
     private List<Boolean> semaforos;
 
     public CarH(ImageView imageView, Rectangle rectangle, int id, boolean tipoEmergencia, String origen) {
@@ -31,6 +32,7 @@ public class CarH {
         this.inCrossing = false;
         this.pare = false;
         this.running = false;
+        this.avenidaNorte = false;
         this.semaforos = Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
     }
 
@@ -110,14 +112,6 @@ public class CarH {
         this.running = running;
     }
 
-    public boolean getCarril() {
-        return carril;
-    }
-
-    public void setCarril(boolean carril) {
-        this.carril = carril;
-    }
-
     public List<Boolean> getSemaforos() {
         return semaforos;
     }
@@ -132,6 +126,24 @@ public class CarH {
 
     public CarH setSemaforos(List<Boolean> semaforos) {
         this.semaforos = semaforos;
+        return this;
+    }
+
+    public boolean isAvenidaNorte() {
+        return avenidaNorte;
+    }
+
+    public CarH setAvenidaNorte(boolean avenidaNorte) {
+        this.avenidaNorte = avenidaNorte;
+        return this;
+    }
+
+    public boolean getCarril() {
+        return carril;
+    }
+
+    public CarH setCarril(boolean carril) {
+        this.carril = carril;
         return this;
     }
 }

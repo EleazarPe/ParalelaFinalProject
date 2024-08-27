@@ -131,8 +131,7 @@ public class HighwayStreet {
     List<Circle> semaforoLuzV = new ArrayList<>();
     List<List<Integer>> carrilSemaforo = Arrays.asList(new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>());
 
-
-
+    List<Integer> ambulancias = new ArrayList<>();
 
     private int idcars = 0;
     private String[] direcciones = new String[3];
@@ -386,11 +385,14 @@ public class HighwayStreet {
         ImageView carritoImagen = new ImageView(image);
         if(ambulancia){
             carritoImagen = new ImageView(new Image("file:src/main/resources/com/example/proyectofinal/cars/ambulanciaShort.png"));
+            // Agregamos la ambulancia a la lista de ambulancias
+            ambulancias.add(idcars);
         }
         carritoImagen.setFitHeight(100);
         carritoImagen.setFitWidth(50);
         Rectangle carrito = new Rectangle(50, 100);
         carrito.setFill(javafx.scene.paint.Color.TRANSPARENT);
+        CarH car = new CarH(carritoImagen, carrito, idcars, ambulancia,id);
         switch (id) {
             case "este" -> {
                 carrito.setX(root.getWidth()-100);
@@ -399,6 +401,7 @@ public class HighwayStreet {
                 carritoImagen.setLayoutY(carrito.getY());
                 carrito.setRotate(270);
                 carritoImagen.setRotate(270);
+                car.setAvenidaNorte(true);
             }
             case "oeste" -> {
                 carrito.setX(50);
@@ -407,9 +410,10 @@ public class HighwayStreet {
                 carritoImagen.setLayoutY(carrito.getY());
                 carrito.setRotate(90);
                 carritoImagen.setRotate(90);
+                car.setAvenidaNorte(false);
             }
         }
-        CarH car = new CarH(carritoImagen, carrito, idcars,ambulancia,id);
+
         OriginalCar oc = new OriginalCar(idcars);
         idcars++;
         cars.add(car);
@@ -996,101 +1000,40 @@ public class HighwayStreet {
             for (CarH c: cars) {
                 if(c.getRectangle().getBoundsInParent().intersects(nortePare1.getBoundsInParent())){
 
-                    // Si esta cruzando
-                    if (c.getSemaforos(SEMAFORO_NORTE_DERECHA)){
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    // Si puede pasar
-                    else if (checkCarPassSemaforo(SEMAFORO_NORTE_DERECHA)){
-                        c.setSemaforos(SEMAFORO_NORTE_DERECHA);
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    // Si no puede cruzar
-                    else{
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
+                    if (ambulancias.isEmpty()){
+                        attemptMoveNormal(c, SEMAFORO_NORTE_DERECHA);
+                    }else{
+
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(nortePare2.getBoundsInParent())){
-                    if (c.getSemaforos(SEMAFORO_NORTE_CENTRO)){
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else if (checkCarPassSemaforo(SEMAFORO_NORTE_CENTRO)){
-                        c.setSemaforos(SEMAFORO_NORTE_CENTRO);
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else{
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
+                    if (ambulancias.isEmpty()){
+                        attemptMoveNormal(c, SEMAFORO_NORTE_CENTRO);
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(nortePare3.getBoundsInParent())){
-                    if (c.getSemaforos(SEMAFORO_NORTE_IZQUIERDA)){
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else if (checkCarPassSemaforo(SEMAFORO_NORTE_IZQUIERDA)){
-                        c.setSemaforos(SEMAFORO_NORTE_IZQUIERDA);
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else{
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
+                    if (ambulancias.isEmpty()){
+                        attemptMoveNormal(c, SEMAFORO_NORTE_IZQUIERDA);
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare1.getBoundsInParent())){
-                    if (c.getSemaforos(SEMAFORO_SUR_IZQUIERDA)){
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else if (checkCarPassSemaforo(SEMAFORO_SUR_IZQUIERDA)){
-                        c.setSemaforos(SEMAFORO_SUR_IZQUIERDA);
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else{
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
+                    if (ambulancias.isEmpty()){
+                        attemptMoveNormal(c, SEMAFORO_SUR_IZQUIERDA);
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare2.getBoundsInParent())){
-                    if (c.getSemaforos(SEMAFORO_SUR_CENTRO)){
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else if (checkCarPassSemaforo(SEMAFORO_SUR_CENTRO)){
-                        c.setSemaforos(SEMAFORO_SUR_CENTRO);
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else{
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
+                    if (ambulancias.isEmpty()){
+                        attemptMoveNormal(c, SEMAFORO_SUR_CENTRO);
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare3.getBoundsInParent())){
-                    if (c.getSemaforos(SEMAFORO_SUR_DERECHA)){
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else if (checkCarPassSemaforo(SEMAFORO_SUR_DERECHA)){
-                        c.setSemaforos(SEMAFORO_SUR_DERECHA);
-                        c.setPare(false);
-                        c.getAnimationTimer().start();
-                    }
-                    else{
-                        c.setPare(true);
-                        c.getAnimationTimer().stop();
+                    if (ambulancias.isEmpty()){
+                        attemptMoveNormal(c, SEMAFORO_SUR_DERECHA);
                     }
                 }
             }
@@ -1159,6 +1102,67 @@ public class HighwayStreet {
     private boolean checkCarPassCarrilSemaforo(int id){
         return  carrilSemaforo.get(id - 1).size() < 3;
     }*/
+
+    private void carroMove(CarH c){
+        c.setPare(true);
+        c.getAnimationTimer().stop();
+    }
+    private void carroStop(CarH c){
+        c.setPare(false);
+        c.getAnimationTimer().start();
+    }
+
+    private void attemptMoveNormal(CarH c, int semaforo){
+        if (c.getSemaforos(SEMAFORO_SUR_IZQUIERDA)){
+            carroMove(c);
+        }
+        else if (checkCarPassSemaforo(SEMAFORO_SUR_IZQUIERDA)){
+            c.setSemaforos(SEMAFORO_SUR_IZQUIERDA);
+            carroMove(c);
+        }
+        else{
+            carroStop(c);
+        }
+    }
+
+    //TODO: verificacion de la ambulancia, agregar mas cheques si es necesario.
+    //TODO: tambien tiene que haber una manera de remover ambulancia cuando salgan de la pantalla
+    private void attemptMoveAmbulance(CarH c, int semaforo){
+
+        CarH ambulancia = cars.stream().filter(car -> car.getId() == ambulancias.getFirst()).findFirst().get();
+
+        // 1. Si un carro esta cruzando hay que dejarlo terminar
+        if (c.getSemaforos(semaforo - 1)){
+            carroMove(c);
+        }
+        // 2. Si la ambulancia esta en el otro carril, bloquear ese carril
+        else if (ambulancia.isAvenidaNorte() != c.isAvenidaNorte() && !c.getSemaforos(semaforo - 1)){
+            carroStop(c);
+        }
+        // No dejar a nadie cruzar a la izquierda excepto la ambulancia
+        else if(false){
+
+        }
+        // 3. Revisar si hay algun carro in crossing que no sea la ambulancia, si es asi, esperar a que no alla ninguno y no cruzar si uno no es la ambulancia.
+        else if (false){
+
+        }
+        // 4. Si no hay mas chequeos, dejar pasar al carro
+        else{
+            c.setSemaforos(semaforo - 1);
+            carroMove(c);
+        }
+/*        if (c.getSemaforos(SEMAFORO_SUR_IZQUIERDA)){
+
+        }
+        else if (checkCarPassSemaforo(SEMAFORO_SUR_IZQUIERDA)){
+            c.setSemaforos(SEMAFORO_SUR_IZQUIERDA);
+            carroMove(c);
+        }
+        else{
+            carroStop(c);
+        }*/
+    }
 
 
 

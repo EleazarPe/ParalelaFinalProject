@@ -182,9 +182,6 @@ public class HighwayStreet {
 
     private void resetAllCars() {
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
-            for (Integer ambs : ambulancias){
-                System.out.println("Ambulancia: "+ambs);
-            }
             List<CarH> carsToRemove = new ArrayList<>();
             for (CarH c: cars) {
                 if(c.getRectangle().getX() < -100 || c.getRectangle().getX() > root.getWidth()+100 || c.getRectangle().getY() < -100 || c.getRectangle().getY() > root.getHeight()+100){
@@ -1010,7 +1007,6 @@ public class HighwayStreet {
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
             for (CarH c: cars) {
                 if(c.getRectangle().getBoundsInParent().intersects(nortePare1.getBoundsInParent())){
-
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_NORTE_DERECHA);
                     }else{
@@ -1035,11 +1031,11 @@ public class HighwayStreet {
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare1.getBoundsInParent())){
-                    if (ambulancias.isEmpty()){
+                   if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_SUR_IZQUIERDA);
-                    }else{
+                   }else{
                         attemptMoveAmbulance(c, SEMAFORO_SUR_IZQUIERDA);
-                    }
+                   }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare2.getBoundsInParent())){
@@ -1134,11 +1130,11 @@ public class HighwayStreet {
     }
 
     private void attemptMoveNormal(CarH c, int semaforo){
-        if (c.getSemaforos(SEMAFORO_SUR_IZQUIERDA)){
+        if (c.getSemaforos(semaforo)){
             carroMove(c);
         }
-        else if (checkCarPassSemaforo(SEMAFORO_SUR_IZQUIERDA)){
-            c.setSemaforos(SEMAFORO_SUR_IZQUIERDA);
+        else if (checkCarPassSemaforo(semaforo)){
+            c.setSemaforos(semaforo);
             carroMove(c);
         }
         else{

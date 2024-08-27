@@ -182,37 +182,48 @@ public class HighwayStreet {
 
     private void resetAllCars() {
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
+            for (Integer ambs : ambulancias){
+                System.out.println("Ambulancia: "+ambs);
+            }
+            List<CarH> carsToRemove = new ArrayList<>();
             for (CarH c: cars) {
                 if(c.getRectangle().getX() < -100 || c.getRectangle().getX() > root.getWidth()+100 || c.getRectangle().getY() < -100 || c.getRectangle().getY() > root.getHeight()+100){
-                    for (OriginalCar cc: carstemp) {
-                        if(cc.getId() == c.getId()){
-                            System.out.println("Salio de pantalla");
-                            c.setSemaforos(Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
-                            if(c.getOrigen().equals("este")) {
-                                c.getRectangle().setX(root.getWidth()+100);
-                                c.getRectangle().setY(este.getCenterY() + 275);
-                                c.getImageView().setLayoutX(c.getRectangle().getX());
-                                c.getImageView().setLayoutY(c.getRectangle().getY());
-                                c.getRectangle().setRotate(270);
-                                c.getImageView().setRotate(270);
+                    if(c.isTipoEmergencia()){
+                        removeAmbulanceQueue(c.getId());
+                        root.getChildren().remove(c.getRectangle());
+                        root.getChildren().remove(c.getImageView());
+                        carsToRemove.add(c);
+                    }else {
+                        for (OriginalCar cc : carstemp) {
+                            if (cc.getId() == c.getId()) {
+                                System.out.println("Salio de pantalla");
+                                c.setSemaforos(Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
+                                if (c.getOrigen().equals("este")) {
+                                    c.getRectangle().setX(root.getWidth() + 100);
+                                    c.getRectangle().setY(este.getCenterY() + 275);
+                                    c.getImageView().setLayoutX(c.getRectangle().getX());
+                                    c.getImageView().setLayoutY(c.getRectangle().getY());
+                                    c.getRectangle().setRotate(270);
+                                    c.getImageView().setRotate(270);
+                                }
+                                if (c.getOrigen().equals("oeste")) {
+                                    c.getRectangle().setX(-100);
+                                    c.getRectangle().setY(oeste.getCenterY() + 595);
+                                    c.getImageView().setLayoutX(c.getRectangle().getX());
+                                    c.getImageView().setLayoutY(c.getRectangle().getY());
+                                    c.getRectangle().setRotate(90);
+                                    c.getImageView().setRotate(90);
+                                }
+                                c.getAnimationTimer().stop();
+                                c.setAnimationTimer(cc.getAnimationTimer());
+                                c.getAnimationTimer().start();
                             }
-                            if(c.getOrigen().equals("oeste")) {
-                                c.getRectangle().setX(-100);
-                                c.getRectangle().setY(oeste.getCenterY()+595);
-                                c.getImageView().setLayoutX(c.getRectangle().getX());
-                                c.getImageView().setLayoutY(c.getRectangle().getY());
-                                c.getRectangle().setRotate(90);
-                                c.getImageView().setRotate(90);
-                            }
-                            c.getAnimationTimer().stop();
-                            c.setAnimationTimer(cc.getAnimationTimer());
-                            c.getAnimationTimer().start();
                         }
                     }
 
                 }
             }
-
+            cars.removeAll(carsToRemove);
         }));
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
@@ -237,11 +248,11 @@ public class HighwayStreet {
         String circleId = circle.getId();
         System.out.println("Circle pressed: " + circleId);
         if(circle.getId().equals("esteamb")) {
-//            addCar("este", true);
-//            direccion();
+          addCar(circle.getId(), true);
+          direccion();
         }else if(circle.getId().equals("oesteamb")){
-//            addCar("oeste", true);
-//            direccion();
+            addCar("oeste", true);
+            direccion();
         }
         esteamb.setVisible(false);
         oesteamb.setVisible(false);
@@ -386,7 +397,6 @@ public class HighwayStreet {
         ImageView carritoImagen = new ImageView(image);
         if(ambulancia){
             carritoImagen = new ImageView(new Image("file:src/main/resources/com/example/proyectofinal/cars/ambulanciaShort.png"));
-            // Agregamos la ambulancia a la lista de ambulancias
             ambulancias.add(idcars);
         }
         carritoImagen.setFitHeight(100);
@@ -1011,30 +1021,40 @@ public class HighwayStreet {
                 if(c.getRectangle().getBoundsInParent().intersects(nortePare2.getBoundsInParent())){
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_NORTE_CENTRO);
+                    }else{
+                        attemptMoveAmbulance(c, SEMAFORO_NORTE_CENTRO);
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(nortePare3.getBoundsInParent())){
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_NORTE_IZQUIERDA);
+                    }else{
+                        attemptMoveAmbulance(c, SEMAFORO_NORTE_IZQUIERDA);
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare1.getBoundsInParent())){
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_SUR_IZQUIERDA);
+                    }else{
+                        attemptMoveAmbulance(c, SEMAFORO_SUR_IZQUIERDA);
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare2.getBoundsInParent())){
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_SUR_CENTRO);
+                    }else{
+                        attemptMoveAmbulance(c, SEMAFORO_SUR_CENTRO);
                     }
                 }
 
                 if(c.getRectangle().getBoundsInParent().intersects(surPare3.getBoundsInParent())){
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_SUR_DERECHA);
+                    }else{
+                        attemptMoveAmbulance(c, SEMAFORO_SUR_DERECHA);
                     }
                 }
             }
@@ -1105,12 +1125,12 @@ public class HighwayStreet {
     }*/
 
     private void carroMove(CarH c){
-        c.setPare(true);
-        c.getAnimationTimer().stop();
-    }
-    private void carroStop(CarH c){
         c.setPare(false);
         c.getAnimationTimer().start();
+    }
+    private void carroStop(CarH c){
+        c.setPare(true);
+        c.getAnimationTimer().stop();
     }
 
     private void attemptMoveNormal(CarH c, int semaforo){
@@ -1146,8 +1166,8 @@ public class HighwayStreet {
         }
         // 3. Revisar si hay algun carro del carril contrario in crossing que no sea la ambulancia, dejarlo pasar antes de la ambulancia
         //TODO: if a car is crossing, stop (despues podemos ser mas especificos con el semaforo).
-        else if (false){
-
+        else if ( carroIsCrossing(ambulancia)){
+            carroStop(c);
         }
         // 4. Si no hay mas chequeos, dejar pasar al carro
         else{
@@ -1155,7 +1175,14 @@ public class HighwayStreet {
             carroMove(c);
         }
     }
-
+    private boolean carroIsCrossing(CarH ambulancia){
+        for (CarH c:  cars) {
+            if(c.isInCrossing() && !c.getOrigen().equals(ambulancia.getOrigen())){
+                return true;
+            }
+        }
+        return false;
+    }
     private boolean isSemaforoWorking(int semaforo){
         return false;
         //return semaforoWorking.get(semaforo - 1);
@@ -1171,6 +1198,11 @@ public class HighwayStreet {
 
     private void turnOnAllSemaforos(){
         semaforoWorking = Arrays.asList(Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE);
+    }
+    private void removeAmbulanceQueue(int id){
+        Integer ambulanciaId = id;
+        ambulancias.remove(ambulanciaId);
+
     }
 
 }

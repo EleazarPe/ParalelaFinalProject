@@ -25,7 +25,6 @@ public class HomeController {
         stage.setScene(scene);
         stage.show();
     }
-
     @FXML
     protected void nomralbtn() throws IOException {
         iniciar(new Stage());

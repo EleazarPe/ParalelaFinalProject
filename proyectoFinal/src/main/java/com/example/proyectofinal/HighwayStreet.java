@@ -50,6 +50,8 @@ public class HighwayStreet {
     private static final String ESTE = "este";
     private static final String OESTE = "oeste";
 
+    private static final int CAR_DISTANCE = 110;
+
 
 
     @FXML
@@ -325,15 +327,14 @@ public class HighwayStreet {
                 double distanciaEuclidiana = Math.sqrt(Math.pow(car1.getRectangle().getX() - car2.getRectangle().getX(), 2) +
                         Math.pow(car1.getRectangle().getY() - car2.getRectangle().getY(), 2));
 
-                if (distanciaEuclidiana < 110) {
+                if (distanciaEuclidiana < CAR_DISTANCE) {
                     // Movimiento de norte a sur (rotación 180)
                     if (car1.getRectangle().getRotate() == 180 && car2.getRectangle().getRotate() == 180) {
                         if (car1.getRectangle().getX() == car2.getRectangle().getX() && // Verifica que estén en el mismo carril
                                 car1.getRectangle().getY() > car2.getRectangle().getY() &&
-                                car1.getRectangle().getY() - car2.getRectangle().getY() < 110) {
+                                car1.getRectangle().getY() - car2.getRectangle().getY() < CAR_DISTANCE) {
                             if (car2.getAnimationTimer() != null) {
-                                car2.getAnimationTimer().stop();
-                                car2.setRunning(false);
+                                carroStop(car2);
                             }
                         }
                     }
@@ -341,10 +342,9 @@ public class HighwayStreet {
                     else if (car1.getRectangle().getRotate() == 0 && car2.getRectangle().getRotate() == 0) {
                         if (car1.getRectangle().getX() == car2.getRectangle().getX() && // Verifica que estén en el mismo carril
                                 car1.getRectangle().getY() < car2.getRectangle().getY() &&
-                                car2.getRectangle().getY() - car1.getRectangle().getY() < 110) {
+                                car2.getRectangle().getY() - car1.getRectangle().getY() < CAR_DISTANCE) {
                             if (car2.getAnimationTimer() != null) {
-                                car2.getAnimationTimer().stop();
-                                car2.setRunning(false);
+                                carroStop(car2);
                             }
                         }
                     }
@@ -352,10 +352,9 @@ public class HighwayStreet {
                     else if (car1.getRectangle().getRotate() == 90 && car2.getRectangle().getRotate() == 90) {
                         if (Math.abs(car1.getRectangle().getY() - car2.getRectangle().getY()) <= 5 && // Verifica que estén en el mismo carril
                                 car1.getRectangle().getX() > car2.getRectangle().getX() &&
-                                car1.getRectangle().getX() - car2.getRectangle().getX() < 110) {
+                                car1.getRectangle().getX() - car2.getRectangle().getX() < CAR_DISTANCE) {
                             if (car2.getAnimationTimer() != null) {
-                                car2.getAnimationTimer().stop();
-                                car2.setRunning(false);
+                                carroStop(car2);
                             }
                         }
                     }
@@ -363,10 +362,9 @@ public class HighwayStreet {
                     else if (car1.getRectangle().getRotate() == 270 && car2.getRectangle().getRotate() == 270) {
                         if (Math.abs(car1.getRectangle().getY() - car2.getRectangle().getY()) <= 5 && // Verifica que estén en el mismo carril
                                 car1.getRectangle().getX() < car2.getRectangle().getX() &&
-                                car2.getRectangle().getX() - car1.getRectangle().getX() < 110) {
+                                car2.getRectangle().getX() - car1.getRectangle().getX() < CAR_DISTANCE) {
                             if (car2.getAnimationTimer() != null) {
-                                car2.getAnimationTimer().stop();
-                                car2.setRunning(false);
+                                carroStop(car2);
                             }
                         }
                     }
@@ -377,46 +375,38 @@ public class HighwayStreet {
 
     private void mover(){
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
-
             for(CarH car: cars){
                 if(!car.isRunning()){
-/*                    if(!car.isInCrossing()) {*/
-                        if(car.getAnimationTimer() != null) {
-                            if(!car.isPare()) {
-                                if(moveChecker(car)) {
-                                    car.getAnimationTimer().start();
-                                    car.setRunning(true);
-                                }
-                            }
+                    if(car.getAnimationTimer() != null) {
+                        if(moveChecker(car)) {
+                            carroMove(car);
                         }
-/*                    }*/
+                    }
                 }
             }
-
         }));
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
     }
     private boolean moveChecker(CarH carro){
-        for (int i = 0; i < cars.size(); i++) {
-            CarH car1 = cars.get(i);
-            if (car1.equals(carro)) {
+        for (CarH c : cars) {
+            if (c.equals(carro)) {
                 continue;
             }
-            if ((car1.getRectangle().getRotate() == 180 && carro.getRectangle().getRotate() == 180)) {
-                if (car1.getRectangle().getY() > carro.getRectangle().getY() && car1.getRectangle().getY() - carro.getRectangle().getY() < 110) {
+            if ((c.getRectangle().getRotate() == 180 && carro.getRectangle().getRotate() == 180)) {
+                if (c.getRectangle().getY() > carro.getRectangle().getY() && c.getRectangle().getY() - carro.getRectangle().getY() < CAR_DISTANCE) {
                     return false;
                 }
-            } else if((car1.getRectangle().getRotate() == 0 && carro.getRectangle().getRotate() == 0)) {
-                if (car1.getRectangle().getY() < carro.getRectangle().getY() && carro.getRectangle().getY() - car1.getRectangle().getY() < 110) {
+            } else if((c.getRectangle().getRotate() == 0 && carro.getRectangle().getRotate() == 0)) {
+                if (c.getRectangle().getY() < carro.getRectangle().getY() && carro.getRectangle().getY() - c.getRectangle().getY() < CAR_DISTANCE) {
                     return false;
                 }
-            }else if((car1.getRectangle().getRotate() == 90 && carro.getRectangle().getRotate() == 90)) {
-                if (car1.getRectangle().getX() > carro.getRectangle().getX() && car1.getRectangle().getX() - carro.getRectangle().getX() < 110) {
+            } else if((c.getRectangle().getRotate() == 90 && carro.getRectangle().getRotate() == 90)) {
+                if (c.getRectangle().getX() > carro.getRectangle().getX() && c.getRectangle().getX() - carro.getRectangle().getX() < CAR_DISTANCE) {
                     return false;
                 }
-            }else if((car1.getRectangle().getRotate() == 270 && carro.getRectangle().getRotate() == 270)) {
-                if (car1.getRectangle().getX() < carro.getRectangle().getX() && carro.getRectangle().getX() - car1.getRectangle().getX() < 110) {
+            }else if((c.getRectangle().getRotate() == 270 && carro.getRectangle().getRotate() == 270)) {
+                if (c.getRectangle().getX() < carro.getRectangle().getX() && carro.getRectangle().getX() - c.getRectangle().getX() < CAR_DISTANCE) {
                     return false;
                 }
             }
@@ -1165,14 +1155,16 @@ public class HighwayStreet {
     }*/
 
     private void carroMove(CarH c){
-        if (c.isPare()){
-            c.setPare(false);
+        if (!c.isRunning()){
+            c.setRunning(true);
             c.getAnimationTimer().start();
         }
     }
     private void carroStop(CarH c){
-        c.setPare(true);
-        c.getAnimationTimer().stop();
+        if (c.isRunning()){
+            c.setRunning(false);
+            c.getAnimationTimer().stop();
+        }
     }
 
     private void attemptMoveNormal(CarH c, int semaforo){
@@ -1220,7 +1212,20 @@ public class HighwayStreet {
         return false;
     }
     private boolean checkCarroIsCrossing(CarH carro,int semaforo){
+
         for (CarH c: cars) {
+
+            if (c.getDestino() == null || carro.getDestino() == null ){
+                continue;
+            }
+
+            List<String> direccionesCarro = Arrays.stream(carro.getDestino()).filter(s -> s != null).toList();
+            List<String> direcciones = Arrays.stream(c.getDestino()).filter(s -> s != null).toList();
+
+            if (direcciones.contains(UDIR) || direccionesCarro.contains(UDIR) || direcciones.isEmpty()){
+                continue;
+            }
+
             if (semaforo - 1 == SEMAFORO_NORTE_DERECHA || semaforo - 1 == SEMAFORO_SUR_DERECHA){
                 if (c.getRectangle().getBoundsInParent().intersects(cruceDerecha.getBoundsInParent()) && !c.getOrigen().equals(carro.getOrigen())){
                     return false;
@@ -1352,7 +1357,7 @@ public class HighwayStreet {
         List<String> direcciones = Arrays.stream(ambulancia.getDestino()).filter(s -> s != null).toList();
         if (
                 direcciones.contains(DERECHADIR)
-                        || direcciones.size() == 3 && direcciones.get(2).equalsIgnoreCase(ALANTEDIR)
+                        || direcciones.contains(ALANTEDIR)
                         || direcciones.getFirst().equalsIgnoreCase(UDIR)
         ){
             if (ambulancia.getOrigen().equalsIgnoreCase(ESTE)){

@@ -17,7 +17,6 @@ public class CarH {
     private String[] destino;
     private AnimationTimer animationTimer;
     private boolean inCrossing;
-    private boolean pare;
     private boolean running;
     private boolean carril;
     private boolean avenidaNorte;
@@ -30,7 +29,6 @@ public class CarH {
         this.tipoEmergencia = tipoEmergencia;
         this.origen = origen;
         this.inCrossing = false;
-        this.pare = false;
         this.running = false;
         this.avenidaNorte = false;
         this.semaforos = Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
@@ -94,14 +92,6 @@ public class CarH {
 
     public void setInCrossing(boolean inCrossing) {
         this.inCrossing = inCrossing;
-    }
-
-    public boolean isPare() {
-        return pare;
-    }
-
-    public void setPare(boolean pare) {
-        this.pare = pare;
     }
 
     public boolean isRunning() {

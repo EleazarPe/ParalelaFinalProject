@@ -350,7 +350,7 @@ public class HighwayStreet {
                     }
                     // Movimiento de este a oeste (rotación 90)
                     else if (car1.getRectangle().getRotate() == 90 && car2.getRectangle().getRotate() == 90) {
-                        if (car1.getRectangle().getY() == car2.getRectangle().getY() && // Verifica que estén en el mismo carril
+                        if (Math.abs(car1.getRectangle().getY() - car2.getRectangle().getY()) <= 5 && // Verifica que estén en el mismo carril
                                 car1.getRectangle().getX() > car2.getRectangle().getX() &&
                                 car1.getRectangle().getX() - car2.getRectangle().getX() < 110) {
                             if (car2.getAnimationTimer() != null) {
@@ -361,7 +361,7 @@ public class HighwayStreet {
                     }
                     // Movimiento de oeste a este (rotación 270)
                     else if (car1.getRectangle().getRotate() == 270 && car2.getRectangle().getRotate() == 270) {
-                        if (car1.getRectangle().getY() == car2.getRectangle().getY() && // Verifica que estén en el mismo carril
+                        if (Math.abs(car1.getRectangle().getY() - car2.getRectangle().getY()) <= 5 && // Verifica que estén en el mismo carril
                                 car1.getRectangle().getX() < car2.getRectangle().getX() &&
                                 car2.getRectangle().getX() - car1.getRectangle().getX() < 110) {
                             if (car2.getAnimationTimer() != null) {
@@ -380,7 +380,7 @@ public class HighwayStreet {
 
             for(CarH car: cars){
                 if(!car.isRunning()){
-                    if(!car.isInCrossing()) {
+/*                    if(!car.isInCrossing()) {*/
                         if(car.getAnimationTimer() != null) {
                             if(!car.isPare()) {
                                 if(moveChecker(car)) {
@@ -389,7 +389,7 @@ public class HighwayStreet {
                                 }
                             }
                         }
-                    }
+/*                    }*/
                 }
             }
 
@@ -1165,8 +1165,10 @@ public class HighwayStreet {
     }*/
 
     private void carroMove(CarH c){
-        c.setPare(false);
-        c.getAnimationTimer().start();
+        if (c.isPare()){
+            c.setPare(false);
+            c.getAnimationTimer().start();
+        }
     }
     private void carroStop(CarH c){
         c.setPare(true);

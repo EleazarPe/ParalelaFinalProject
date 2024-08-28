@@ -39,8 +39,8 @@ public class HighwayStreet {
     private static final int SEMAFORO_NORTE_IZQUIERDA = 1;
     private static final int SEMAFORO_SUR_IZQUIERDA = 2;
 
-    private static final int SEMAFORO_TIMER_MILLI = 5000;
-    private static final int SEMAFORO_AMARILLO_TIMER_MILLI = 3000;
+    private static final int SEMAFORO_TIMER_MILLI = 8000;
+    private static final int SEMAFORO_AMARILLO_TIMER_MILLI = 6000;
 
     private static final String DERECHADIR = "derechadir";
     private static final String IZQUIERDADIR = "izquierdadir";

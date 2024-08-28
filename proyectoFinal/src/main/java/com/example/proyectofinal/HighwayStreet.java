@@ -39,7 +39,7 @@ public class HighwayStreet {
     private static final int SEMAFORO_NORTE_IZQUIERDA = 1;
     private static final int SEMAFORO_SUR_IZQUIERDA = 2;
 
-    private static final int SEMAFORO_TIMER_MILLI = 10000;
+    private static final int SEMAFORO_TIMER_MILLI = 5000;
     private static final int SEMAFORO_AMARILLO_TIMER_MILLI = 3000;
 
     private static final String DERECHADIR = "derechadir";
@@ -1333,40 +1333,69 @@ public class HighwayStreet {
                 continue;
             }
 
+            if (
+                    carro.getRectangle().getBoundsInParent().intersects(cruceDerecha.getBoundsInParent())
+                    || carro.getRectangle().getBoundsInParent().intersects(cruceCentro.getBoundsInParent())
+                    || carro.getRectangle().getBoundsInParent().intersects(cruceIzquiera.getBoundsInParent())
+            ){
+                continue;
+            }
+
             List<String> direcciones = Arrays.stream(c.getDestino()).filter(s -> s != null).toList();
             List<String> direccionesCarro = Arrays.stream(carro.getDestino()).filter(s -> s != null).toList();
 
             if (semaforo - 1 == SEMAFORO_NORTE_DERECHA || semaforo - 1 == SEMAFORO_SUR_DERECHA) {
                 if (c.getRectangle().getBoundsInParent().intersects(cruceDerecha.getBoundsInParent())) {
-                    // Revisando si carro va a doblar en U
-                    if (direcciones.contains(UDIR) || direccionesCarro.contains(UDIR)) {
-                        if (!c.getOrigen().equals(carro.getOrigen()) && c.getRectangle().getRotate() != carro.getRectangle().getRotate()) {
+
+                    if (!c.getOrigen().equals(carro.getOrigen()) && !direccionesCarro.contains(UDIR)){
+                        return false;
+                    }else if(direccionesCarro.contains(UDIR)){
+
+                        String tempOrigen = carro.getOrigen();
+                        if (carro.getRectangle().getRotate() == 90 || carro.getOrigen().equalsIgnoreCase(ESTE)){
+                            tempOrigen = OESTE;
+                        }else if (carro.getRectangle().getRotate() == 270 || carro.getOrigen().equalsIgnoreCase(OESTE)){
+                            tempOrigen = ESTE;
+                        }
+                        if (!c.getOrigen().equals(tempOrigen)){
                             return false;
                         }
-                    } else if (!c.getOrigen().equals(carro.getOrigen())) {
-                        return false;
                     }
                 }
             } else if (semaforo - 1 == SEMAFORO_NORTE_CENTRO || semaforo - 1 == SEMAFORO_SUR_CENTRO) {
                 if (c.getRectangle().getBoundsInParent().intersects(cruceCentro.getBoundsInParent())) {
                     // Revisando si carro va a doblar en U
-                    if (direcciones.contains(UDIR) || direccionesCarro.contains(UDIR)) {
-                        if (!c.getOrigen().equals(carro.getOrigen()) && c.getRectangle().getRotate() != carro.getRectangle().getRotate()) {
+                    if (!c.getOrigen().equals(carro.getOrigen()) && !direccionesCarro.contains(UDIR)){
+                        return false;
+                    }else if(direccionesCarro.contains(UDIR)){
+
+                        String tempOrigen = carro.getOrigen();
+                        if (carro.getRectangle().getRotate() == 90 || carro.getOrigen().equalsIgnoreCase(ESTE)){
+                            tempOrigen = OESTE;
+                        }else if (carro.getRectangle().getRotate() == 270 || carro.getOrigen().equalsIgnoreCase(OESTE)){
+                            tempOrigen = ESTE;
+                        }
+                        if (!c.getOrigen().equals(tempOrigen)){
                             return false;
                         }
-                    } else if (!c.getOrigen().equals(carro.getOrigen())) {
-                        return false;
                     }
                 }
             } else if (semaforo - 1 == SEMAFORO_NORTE_IZQUIERDA || semaforo - 1 == SEMAFORO_SUR_IZQUIERDA) {
                 if (c.getRectangle().getBoundsInParent().intersects(cruceIzquiera.getBoundsInParent())) {
                     // Revisando si carro va a doblar en U
-                    if (direcciones.contains(UDIR) || direccionesCarro.contains(UDIR)) {
-                        if (!c.getOrigen().equals(carro.getOrigen()) && c.getRectangle().getRotate() != carro.getRectangle().getRotate()) {
+                    if (!c.getOrigen().equals(carro.getOrigen()) && !direccionesCarro.contains(UDIR)){
+                        return false;
+                    }else if(direccionesCarro.contains(UDIR)){
+
+                        String tempOrigen = carro.getOrigen();
+                        if (carro.getRectangle().getRotate() == 90 || carro.getOrigen().equalsIgnoreCase(ESTE)){
+                            tempOrigen = OESTE;
+                        }else if (carro.getRectangle().getRotate() == 270 || carro.getOrigen().equalsIgnoreCase(OESTE)){
+                            tempOrigen = ESTE;
+                        }
+                        if (!c.getOrigen().equals(tempOrigen)){
                             return false;
                         }
-                    } else if (!c.getOrigen().equals(carro.getOrigen())) {
-                        return false;
                     }
                 }
             }
@@ -1482,6 +1511,10 @@ public class HighwayStreet {
 
     private void turnOffSelectiveSemaforos(){
         CarH ambulancia = cars.stream().filter(car -> car.getId() == ambulancias.getFirst()).findFirst().get();
+
+        if (ambulancia.getDestino() == null){
+            return;
+        }
 
         List<String> direcciones = Arrays.stream(ambulancia.getDestino()).filter(s -> s != null).toList();
         if (

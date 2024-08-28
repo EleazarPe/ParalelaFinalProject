@@ -50,7 +50,7 @@ public class HighwayStreet {
     private static final String ESTE = "este";
     private static final String OESTE = "oeste";
 
-    private static final int CAR_DISTANCE = 110;
+    private static final int CAR_DISTANCE = 120;
 
 
 
@@ -197,7 +197,7 @@ public class HighwayStreet {
             }
         });
         cercania();
-        mover();
+        //mover();
         cambioCarril();
         llegaAlcruceRojo();
         resetAllCars();
@@ -373,7 +373,7 @@ public class HighwayStreet {
         }
     }
 
-    private void mover(){
+/*    private void mover(){
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
             for(CarH car: cars){
                 if(!car.isRunning()){
@@ -387,26 +387,39 @@ public class HighwayStreet {
         }));
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
-    }
+    }*/
+
     private boolean moveChecker(CarH carro){
         for (CarH c : cars) {
             if (c.equals(carro)) {
                 continue;
             }
             if ((c.getRectangle().getRotate() == 180 && carro.getRectangle().getRotate() == 180)) {
-                if (c.getRectangle().getY() > carro.getRectangle().getY() && c.getRectangle().getY() - carro.getRectangle().getY() < CAR_DISTANCE) {
+                if (c.getRectangle().getY() > carro.getRectangle().getY()
+                        && c.getRectangle().getY() - carro.getRectangle().getY() < CAR_DISTANCE
+                        && Math.abs(c.getRectangle().getX() - carro.getRectangle().getX()) <= 5
+                ) {
                     return false;
                 }
             } else if((c.getRectangle().getRotate() == 0 && carro.getRectangle().getRotate() == 0)) {
-                if (c.getRectangle().getY() < carro.getRectangle().getY() && carro.getRectangle().getY() - c.getRectangle().getY() < CAR_DISTANCE) {
+                if (c.getRectangle().getY() < carro.getRectangle().getY()
+                        && carro.getRectangle().getY() - c.getRectangle().getY() < CAR_DISTANCE
+                        && Math.abs(c.getRectangle().getX() - carro.getRectangle().getX()) <= 5
+                ) {
                     return false;
                 }
             } else if((c.getRectangle().getRotate() == 90 && carro.getRectangle().getRotate() == 90)) {
-                if (c.getRectangle().getX() > carro.getRectangle().getX() && c.getRectangle().getX() - carro.getRectangle().getX() < CAR_DISTANCE) {
+                if (c.getRectangle().getX() > carro.getRectangle().getX()
+                        && c.getRectangle().getX() - carro.getRectangle().getX() < CAR_DISTANCE
+                        && Math.abs(c.getRectangle().getY() - carro.getRectangle().getY()) <= 5
+                ) {
                     return false;
                 }
             }else if((c.getRectangle().getRotate() == 270 && carro.getRectangle().getRotate() == 270)) {
-                if (c.getRectangle().getX() < carro.getRectangle().getX() && carro.getRectangle().getX() - c.getRectangle().getX() < CAR_DISTANCE) {
+                if (c.getRectangle().getX() < carro.getRectangle().getX()
+                        && carro.getRectangle().getX() - c.getRectangle().getX() < CAR_DISTANCE
+                        && Math.abs(c.getRectangle().getY() - carro.getRectangle().getY()) <= 5
+                ) {
                     return false;
                 }
             }
@@ -526,49 +539,130 @@ public class HighwayStreet {
         return car;
     }
 
+    private boolean checkCambiarCarril(CarH car, Rectangle carril){
+
+/*        List<String> direccionesCarro = Arrays.asList(car.getDestino());
+
+        List<CarH> carrosEnCambioCarril = cars.stream().filter(c -> c.getRectangle().getBoundsInParent().intersects(carril.getBoundsInParent()) && !c.equals(car)).toList();
+
+        for (CarH c : carrosEnCambioCarril){
+            // Si el carro esta mas abajo en el eje Y que carro, entonces la resta dara negativo y lo contrario si esta arriba.
+            boolean otroCarroEstaArribaDeCarro = c.getRectangle().getY() - car.getRectangle().getY() < 0 ? true : false;
+            System.out.println("El carro esta arriba:" + otroCarroEstaArribaDeCarro + " " + c.getRectangle().getY() + " " + car.getRectangle().getY());
+
+            if (car.getOrigen().equalsIgnoreCase(ESTE)){
+                if(direccionesCarro.contains(DERECHADIR) && otroCarroEstaArribaDeCarro){
+                    return false;
+                }else if (!otroCarroEstaArribaDeCarro){
+                    return false;
+                }
+            }else{
+                if(direccionesCarro.contains(DERECHADIR) && !otroCarroEstaArribaDeCarro){
+                    return false;
+                }else if (otroCarroEstaArribaDeCarro){
+                    return false;
+                }
+            }
+        }*/
+        return true;
+    }
+
     public void cambioCarril(){
         Timeline collisionChecker = new Timeline(new KeyFrame(Duration.millis(1), event -> {
             for (CarH car : cars) {
-                if (car.getRectangle().getBoundsInParent().intersects(carrilNorteTercero.getBoundsInParent()) && !car.getCarril() && car.getOrigen().equals("este")){
-                    car.setCarril(true);
-                    if(!car.getDestino()[2].equals(ALANTEDIR)){
-                       System.out.println("Cambio de carril1");
-                        cambioCarrilAction(car,2);
+                if (car.getRectangle().getBoundsInParent().intersects(carrilNorteTercero.getBoundsInParent()) && !car.getCarril() && car.getOrigen().equals(ESTE)){
+                    if (checkCambiarCarril(car, carrilNorteTercero)){
+                        //carroMove(car);
+                        car.setCarril(true);
+                        if(!car.getDestino()[2].equals(ALANTEDIR)){
+                            System.out.println("Cambio de carril1");
+                            cambioCarrilAction(car,2);
+                        }
+                    }else{
+                        carroStop(car);
                     }
+
                 }else if(car.getRectangle().getBoundsInParent().intersects(carrilNorteSegundo.getBoundsInParent()) && !car.getCarril()&& !car.getCarril() && car.getOrigen().equals("este")) {
-                    car.setCarril(true);
-                    if(!car.getDestino()[1].equals(ALANTEDIR)){
-                        System.out.println("Cambio de carril2");
-                        cambioCarrilAction(car, 1);
+                    if (checkCambiarCarril(car, carrilNorteSegundo)){
+                        //carroMove(car);
+                        car.setCarril(true);
+                        if(!car.getDestino()[1].equals(ALANTEDIR)){
+                            System.out.println("Cambio de carril1");
+                            cambioCarrilAction(car,1);
+                        }
+                    }else{
+                        carroStop(car);
                     }
 
                 }else if (car.getRectangle().getBoundsInParent().intersects(carrilNortePrimero.getBoundsInParent()) && !car.getCarril()&& !car.getCarril() && car.getOrigen().equals("este")) {
-                    car.setCarril(true);
-                    if(!car.getDestino()[0].equals(ALANTEDIR)){
-                        System.out.println("Cambio de carril3");
-                        cambioCarrilAction(car, 0);
+
+                    if (checkCambiarCarril(car, carrilNortePrimero)){
+                        //carroMove(car);
+                        car.setCarril(true);
+                        if(!car.getDestino()[0].equals(ALANTEDIR)){
+                            System.out.println("Cambio de carril1");
+                            cambioCarrilAction(car,0);
+                        }
+                    }else{
+                        carroStop(car);
                     }
 
                 }
                 if (car.getRectangle().getBoundsInParent().intersects(carrilSurPrimero.getBoundsInParent()) && !car.getCarril()&& !car.getCarril() && car.getOrigen().equals("oeste")) {
-                    car.setCarril(true);
+
+                    if (checkCambiarCarril(car, carrilSurPrimero)){
+                        //carroMove(car);
+                        car.setCarril(true);
+                        if(!car.getDestino()[0].equals(ALANTEDIR)){
+                            System.out.println("Cambio de carril1");
+                            cambioCarrilAction(car,0);
+                        }
+                    }else{
+                        carroStop(car);
+                    }
+
+                    /*car.setCarril(true);
                     if(!car.getDestino()[0].equals(ALANTEDIR)){
                         System.out.println("Cambio de carril1");
                         cambioCarrilAction(car,0);
-                    }
+                    }*/
                 }else if(car.getRectangle().getBoundsInParent().intersects(carrilSurSegundo.getBoundsInParent()) && !car.getCarril()&& !car.getCarril() && car.getOrigen().equals("oeste")) {
-                    car.setCarril(true);
+
+                    if (checkCambiarCarril(car, carrilSurSegundo)){
+                        //carroMove(car);
+                        car.setCarril(true);
+                        if(!car.getDestino()[1].equals(ALANTEDIR)){
+                            System.out.println("Cambio de carril1");
+                            cambioCarrilAction(car,1);
+                        }
+                    }else{
+                        carroStop(car);
+                    }
+
+                    /*car.setCarril(true);
                     if(!car.getDestino()[1].equals(ALANTEDIR)){
                         System.out.println("Cambio de carril2");
                         cambioCarrilAction(car, 1);
-                    }
+                    }*/
 
                 }else if (car.getRectangle().getBoundsInParent().intersects(carrilSurTercero.getBoundsInParent()) && !car.getCarril() && !car.getCarril() && car.getOrigen().equals("oeste")) {
-                    car.setCarril(true);
+
+                    if (checkCambiarCarril(car, carrilSurSegundo)){
+                        //carroMove(car);
+                        car.setCarril(true);
+                        if(!car.getDestino()[2].equals(ALANTEDIR)){
+                            System.out.println("Cambio de carril1");
+                            cambioCarrilAction(car,2);
+                        }
+                    }else{
+                        carroStop(car);
+                    }
+
+                    /*car.setCarril(true);
                     if(!car.getDestino()[2].equals(ALANTEDIR)){
                         System.out.println("Cambio de carril3");
                         cambioCarrilAction(car, 2);
-                    }
+                    }*/
 
                 }
                 if(car.getOrigen().equals("este") && (!car.getRectangle().getBoundsInParent().intersects(carrilNorteTercero.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilNorteSegundo.getBoundsInParent()) && !car.getRectangle().getBoundsInParent().intersects(carrilNortePrimero.getBoundsInParent()))){
@@ -1048,7 +1142,7 @@ public class HighwayStreet {
                     }
                 }
 
-                if(c.getRectangle().getBoundsInParent().intersects(nortePare2.getBoundsInParent())){
+                else if(c.getRectangle().getBoundsInParent().intersects(nortePare2.getBoundsInParent())){
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_NORTE_CENTRO);
                     }else{
@@ -1056,7 +1150,7 @@ public class HighwayStreet {
                     }
                 }
 
-                if(c.getRectangle().getBoundsInParent().intersects(nortePare3.getBoundsInParent())){
+                else if(c.getRectangle().getBoundsInParent().intersects(nortePare3.getBoundsInParent())){
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_NORTE_IZQUIERDA);
                     }else{
@@ -1064,7 +1158,7 @@ public class HighwayStreet {
                     }
                 }
 
-                if(c.getRectangle().getBoundsInParent().intersects(surPare1.getBoundsInParent())){
+                else if(c.getRectangle().getBoundsInParent().intersects(surPare1.getBoundsInParent())){
                    if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_SUR_IZQUIERDA);
                    }else{
@@ -1072,7 +1166,7 @@ public class HighwayStreet {
                    }
                 }
 
-                if(c.getRectangle().getBoundsInParent().intersects(surPare2.getBoundsInParent())){
+                else if(c.getRectangle().getBoundsInParent().intersects(surPare2.getBoundsInParent())){
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_SUR_CENTRO);
                     }else{
@@ -1080,11 +1174,19 @@ public class HighwayStreet {
                     }
                 }
 
-                if(c.getRectangle().getBoundsInParent().intersects(surPare3.getBoundsInParent())){
+                else if(c.getRectangle().getBoundsInParent().intersects(surPare3.getBoundsInParent())){
                     if (ambulancias.isEmpty()){
                         attemptMoveNormal(c, SEMAFORO_SUR_DERECHA);
                     }else{
                         attemptMoveAmbulance(c, SEMAFORO_SUR_DERECHA);
+                    }
+                }else{
+                    if(!c.isRunning()){
+                        if(c.getAnimationTimer() != null) {
+                            if(moveChecker(c)) {
+                                carroMove(c);
+                            }
+                        }
                     }
                 }
             }
@@ -1168,7 +1270,11 @@ public class HighwayStreet {
     }
 
     private void attemptMoveNormal(CarH c, int semaforo){
-        if (!checkCarroIsCrossing(c, semaforo)) {
+
+        if (!moveChecker(c)){
+            carroStop(c);
+        }
+        else if (!checkCarroIsCrossing(c, semaforo)) {
             carroStop(c);
         }
         else if (c.getSemaforos(semaforo)){
@@ -1186,7 +1292,10 @@ public class HighwayStreet {
 
         CarH ambulancia = cars.stream().filter(car -> car.getId() == ambulancias.getFirst()).findFirst().get();
 
-        if (isSemaforoWorking(semaforo) && !c.isTipoEmergencia()){
+        if (!moveChecker(c)){
+            carroStop(c);
+        }
+        else if (isSemaforoWorking(semaforo) && !c.isTipoEmergencia()){
             attemptMoveNormal(c, semaforo);
         }
         // 1. Si un carro esta cruzando hay que dejarlo terminar
@@ -1211,34 +1320,54 @@ public class HighwayStreet {
         }
         return false;
     }
-    private boolean checkCarroIsCrossing(CarH carro,int semaforo){
 
-        for (CarH c: cars) {
+    private boolean checkCarroIsCrossing(CarH carro, int semaforo) {
 
-            if (c.getDestino() == null || carro.getDestino() == null ){
+        for (CarH c : cars) {
+
+            if (c == carro){
                 continue;
             }
 
-            List<String> direccionesCarro = Arrays.stream(carro.getDestino()).filter(s -> s != null).toList();
+            if (c.getDestino() == null || carro.getDestino() == null) {
+                continue;
+            }
+
             List<String> direcciones = Arrays.stream(c.getDestino()).filter(s -> s != null).toList();
+            List<String> direccionesCarro = Arrays.stream(carro.getDestino()).filter(s -> s != null).toList();
 
-            if (direcciones.contains(UDIR) || direccionesCarro.contains(UDIR) || direcciones.isEmpty()){
-                continue;
-            }
-
-            if (semaforo - 1 == SEMAFORO_NORTE_DERECHA || semaforo - 1 == SEMAFORO_SUR_DERECHA){
-                if (c.getRectangle().getBoundsInParent().intersects(cruceDerecha.getBoundsInParent()) && !c.getOrigen().equals(carro.getOrigen())){
-                    return false;
+            if (semaforo - 1 == SEMAFORO_NORTE_DERECHA || semaforo - 1 == SEMAFORO_SUR_DERECHA) {
+                if (c.getRectangle().getBoundsInParent().intersects(cruceDerecha.getBoundsInParent())) {
+                    // Revisando si carro va a doblar en U
+                    if (direcciones.contains(UDIR) || direccionesCarro.contains(UDIR)) {
+                        if (!c.getOrigen().equals(carro.getOrigen()) && c.getRectangle().getRotate() != carro.getRectangle().getRotate()) {
+                            return false;
+                        }
+                    } else if (!c.getOrigen().equals(carro.getOrigen())) {
+                        return false;
+                    }
                 }
-            }
-            else if (semaforo - 1 == SEMAFORO_NORTE_CENTRO || semaforo - 1 == SEMAFORO_SUR_CENTRO){
-                if (c.getRectangle().getBoundsInParent().intersects(cruceCentro.getBoundsInParent()) && !c.getOrigen().equals(carro.getOrigen())){
-                    return false;
+            } else if (semaforo - 1 == SEMAFORO_NORTE_CENTRO || semaforo - 1 == SEMAFORO_SUR_CENTRO) {
+                if (c.getRectangle().getBoundsInParent().intersects(cruceCentro.getBoundsInParent())) {
+                    // Revisando si carro va a doblar en U
+                    if (direcciones.contains(UDIR) || direccionesCarro.contains(UDIR)) {
+                        if (!c.getOrigen().equals(carro.getOrigen()) && c.getRectangle().getRotate() != carro.getRectangle().getRotate()) {
+                            return false;
+                        }
+                    } else if (!c.getOrigen().equals(carro.getOrigen())) {
+                        return false;
+                    }
                 }
-            }
-            else if (semaforo - 1 == SEMAFORO_NORTE_IZQUIERDA || semaforo - 1 == SEMAFORO_SUR_IZQUIERDA){
-                if (c.getRectangle().getBoundsInParent().intersects(cruceIzquiera.getBoundsInParent()) && !c.getOrigen().equals(carro.getOrigen())){
-                    return false;
+            } else if (semaforo - 1 == SEMAFORO_NORTE_IZQUIERDA || semaforo - 1 == SEMAFORO_SUR_IZQUIERDA) {
+                if (c.getRectangle().getBoundsInParent().intersects(cruceIzquiera.getBoundsInParent())) {
+                    // Revisando si carro va a doblar en U
+                    if (direcciones.contains(UDIR) || direccionesCarro.contains(UDIR)) {
+                        if (!c.getOrigen().equals(carro.getOrigen()) && c.getRectangle().getRotate() != carro.getRectangle().getRotate()) {
+                            return false;
+                        }
+                    } else if (!c.getOrigen().equals(carro.getOrigen())) {
+                        return false;
+                    }
                 }
             }
         }
